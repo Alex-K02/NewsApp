@@ -13,7 +13,6 @@ This app offers a personalized platform for browsing, managing, and engaging wit
 ### UI Design
 * Main Page: An intuitive main screen layout, connected to Core Data, allows users to easily browse articles.
 * Article Detail Page: A detailed view for each article, designed to enhance readability and engagement.
-(Screenshot placeholders for main page and detail page)
 
 ## Extended Functionality
 ### User Preferences
@@ -27,7 +26,7 @@ Continuous Content Updates
 * Content Relevance Analysis: New articles are analyzed and prioritized based on user preferences, ensuring the most relevant content is shown first.
 
 ## Event Functionality
-## Event Management and Display
+### Event Management and Display
 * Event Page Design: A dedicated interface for users to explore and manage event details.
 * Liked Events: An option to "like" events and delete them from the account page as needed.
 * Event Parsing and Storage: AI-driven modules parse event data and store it in a Core Data structure dedicated to events.
