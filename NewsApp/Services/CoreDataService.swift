@@ -299,7 +299,6 @@ class CoreDataService: ObservableObject {
     //MARK: - PeriodicDataSync
     func enablePeriodicDataSync(articleListViewModel: ArticlesListViewModel) async throws {
         syncTask = Task {
-            let pushNotificatonService = PushNotificationService()
             var lastSyncTime: String = "2024-08-24 11:27:00"
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -310,7 +309,7 @@ class CoreDataService: ObservableObject {
                     let articleScores = try await evaluateArticles(newArticles: fetchedArticles)
                     let sortedArticles = try await sortByDateAndScore(articles: articleScores)
                     if let sortedArticle = sortedArticles.first {
-                        pushNotificatonService.dispatchNotificationWithInterval(identifier: UUID().uuidString, title: "New Article: \(sortedArticle.article.title ?? "No Title")", body: sortedArticle.article.descrip ?? "No description", timeInterval: 60.0)
+                        NotificationManager.shared.dispatchNotification(identifier: UUID().uuidString, title: "New Article: \(sortedArticle.article.title ?? "No Title")", body: sortedArticle.article.descrip ?? "No description", timeInterval: 60.0)
                     }
                 }
                 catch {

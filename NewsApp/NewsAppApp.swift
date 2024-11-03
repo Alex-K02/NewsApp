@@ -21,8 +21,13 @@ struct NewsAppApp: App {
         _coreDataService = StateObject(wrappedValue: coreDataService)
         _articleListViewModel = StateObject(wrappedValue: ArticlesListViewModel(coreDataService: coreDataService))
         _eventsListViewModel = StateObject(wrappedValue: EventsListViewModel(coreDataService: coreDataService))
-        let pushNotificationService = PushNotificationService()
-        pushNotificationService.requestPermission()
+        NotificationManager.shared.requestPermission { success in
+            if success {
+                print("Permission granted!")
+            } else {
+                print("Permission denied.")
+            }
+        }
     }
     
             
