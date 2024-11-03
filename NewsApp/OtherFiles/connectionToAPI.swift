@@ -1,6 +1,6 @@
 //
 //  connectionToAPI.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 24.08.24.
 //

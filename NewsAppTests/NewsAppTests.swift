@@ -1,6 +1,6 @@
 //
-//  combiningSqlAndSwiftTests.swift
-//  combiningSqlAndSwiftTests
+//  NewsAppTests.swift
+//  NewsAppTests
 //
 //  Created by Alex Kondratiev on 19.08.24.
 //

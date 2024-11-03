@@ -1,6 +1,6 @@
 //
 //  EmailService.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 17.09.24.
 //

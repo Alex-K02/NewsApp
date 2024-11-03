@@ -1,6 +1,6 @@
 //
-//  combiningSqlAndSwiftUITestsLaunchTests.swift
-//  combiningSqlAndSwiftUITests
+//  NewsAppUITestsLaunchTests.swift
+//  NewsAppUITests
 //
 //  Created by Alex Kondratiev on 19.08.24.
 //

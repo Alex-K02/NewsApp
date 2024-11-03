@@ -1,6 +1,6 @@
 //
 //  ArticleDetailedView.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 20.08.24.
 //

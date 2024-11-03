@@ -1,6 +1,6 @@
 //
 //  EditButtonView.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 01.10.24.
 //

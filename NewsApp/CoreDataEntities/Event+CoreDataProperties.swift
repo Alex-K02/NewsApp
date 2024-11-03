@@ -1,6 +1,6 @@
 //
 //  Event+CoreDataProperties.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 22.10.24.
 //

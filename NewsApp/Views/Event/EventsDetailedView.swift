@@ -133,8 +133,10 @@ struct ListBlockView: View {
             else {
                 VStack(alignment: .leading, spacing: 5) {
                     ForEach(transformedData, id: \.self) { person in
-                        Text("• \(person)")
-                            .padding(.leading, 10)
+                        if !person.isEmpty {
+                            Text("• \(person)")
+                                .padding(.leading, 10)
+                        }
                     }
                 }
             }

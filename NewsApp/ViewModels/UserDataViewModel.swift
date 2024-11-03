@@ -1,6 +1,6 @@
 //
 //  UserDataViewModel.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 06.10.24.
 //

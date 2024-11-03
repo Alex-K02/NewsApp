@@ -1,6 +1,6 @@
 //
 //  ProfileEventBlockView.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 02.11.24.
 //

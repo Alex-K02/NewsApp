@@ -1,6 +1,6 @@
 //
 //  SQLHelper.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 26.09.24.
 //

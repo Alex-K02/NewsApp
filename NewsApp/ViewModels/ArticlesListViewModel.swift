@@ -1,6 +1,6 @@
 //
 //  ArticlesListViewModel.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 28.08.24.
 //

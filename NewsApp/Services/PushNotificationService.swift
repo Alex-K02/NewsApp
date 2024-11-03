@@ -1,6 +1,6 @@
 //
 //  PushNotificationService.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 07.10.24.
 //

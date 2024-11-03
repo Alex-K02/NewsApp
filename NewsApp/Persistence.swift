@@ -1,6 +1,6 @@
 //
 //  Persistence.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 19.08.24.
 //
@@ -15,10 +15,10 @@ struct PersistenceController {
         
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-        }
+//        for _ in 0..<10 {
+//            let newItem = Item(context: viewContext)
+//            newItem.timestamp = Date()
+//        }
         do {
             try viewContext.save()
         } catch {
@@ -36,7 +36,7 @@ struct PersistenceController {
     init(inMemory: Bool = false) {
         ValueTransformer.setValueTransformer(PreferencesTransformer(), forName: NSValueTransformerName("PreferencesTransformer"))
         
-        container = NSPersistentContainer(name: "combiningSqlAndSwift")
+        container = NSPersistentContainer(name: "NewsApp")
         
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")

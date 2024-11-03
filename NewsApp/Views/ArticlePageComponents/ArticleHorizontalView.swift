@@ -1,6 +1,6 @@
 //
 //  ArticleHorizontalView.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 27.10.24.
 //

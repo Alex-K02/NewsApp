@@ -1,6 +1,6 @@
 //
 //  DateFieldView.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 22.09.24.
 //

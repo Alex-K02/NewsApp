@@ -1,6 +1,6 @@
 //
 //  SmallArticleBlockView.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 15.09.24.
 //

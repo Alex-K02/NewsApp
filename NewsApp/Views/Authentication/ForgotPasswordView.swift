@@ -1,6 +1,6 @@
 //
 //  ForgotPasswordView.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 12.09.24.
 //

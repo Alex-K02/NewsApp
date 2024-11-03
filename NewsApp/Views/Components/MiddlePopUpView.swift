@@ -1,6 +1,6 @@
 //
 //  MiddlePopUpView.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 02.10.24.
 //

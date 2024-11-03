@@ -1,6 +1,6 @@
 //
 //  mysqlConnection.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 19.08.24.
 //

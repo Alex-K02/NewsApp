@@ -1,6 +1,6 @@
 //
 //  ChangePasswordView.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 11.10.24.
 //

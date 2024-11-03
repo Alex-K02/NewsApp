@@ -1,6 +1,6 @@
 //
 //  CoreDataService.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 02.09.24.
 //
@@ -26,7 +26,7 @@ class CoreDataService: ObservableObject {
     }
     
     public func printCoreDataStoreLocation() {
-        let container = NSPersistentContainer(name: "combiningSqlAndSwift")
+        let container = NSPersistentContainer(name: "NewsApp")
         container.loadPersistentStores { (storeDescription, error) in
             if let error = error {
                 print("Unresolved error \(error), \(error.localizedDescription)")
@@ -103,12 +103,14 @@ class CoreDataService: ObservableObject {
                 print("Data is not in expected JSON array format.")
             }
             
-            await viewContext.perform {
-                do {
-                    try self.viewContext.save() // Save the context to persist data
-                    print("Successfully saved events to Core Data.")
-                } catch {
-                    print("Failed to save events to Core Data: \(error.localizedDescription)")
+            if newEventsCount != 0 {
+                await viewContext.perform {
+                    do {
+                        try self.viewContext.save() // Save the context to persist data
+                        print("Successfully saved events to Core Data.")
+                    } catch {
+                        print("Failed to save events to Core Data: \(error.localizedDescription)")
+                    }
                 }
             }
         }
@@ -305,6 +307,7 @@ class CoreDataService: ObservableObject {
             
             while !Task.isCancelled { // Check if the task has been cancelled
                 let fetchedArticles = await articleListViewModel.fetchArticles(lastSyncTime: lastSyncTime)
+                
                 do {
                     let articleScores = try await evaluateArticles(newArticles: fetchedArticles)
                     let sortedArticles = try await sortByDateAndScore(articles: articleScores)
@@ -315,6 +318,7 @@ class CoreDataService: ObservableObject {
                 catch {
                     print("Error with fetching new articles: \(error.localizedDescription)")
                 }
+                
                 lastSyncTime = dateFormatter.string(from: Date())
                 print("I am keep fetching articles...")
                 try? await Task.sleep(nanoseconds: 5 * 60 * 1_000_000_000) // Sleep for 5 minutes
@@ -517,7 +521,6 @@ class CoreDataService: ObservableObject {
         }
     }
 
-
     
     public func signInCheck(email: String, password: String, rememberMe: Bool) async -> SignInResult {
         do {
@@ -609,8 +612,13 @@ class CoreDataService: ObservableObject {
             print("New articles added: \(amountOfNewArticles)")
 
             // Save Core Data context
-            try self.viewContext.save()
-            print("Successfully saved articles to Core Data.")
+            if amountOfNewArticles != 0 {
+                try self.viewContext.save()
+                print("Successfully saved articles to Core Data.")
+            }
+            else {
+                print("No new articles")
+            }
         } catch {
             print("Failed to process articles: \(error.localizedDescription)")
         }

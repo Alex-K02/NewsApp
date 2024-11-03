@@ -1,6 +1,6 @@
 //
 //  FirstMainPartView.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 15.09.24.
 //
@@ -19,14 +19,6 @@ struct FirstPartMainView: View {
     var body: some View {
         LogoNameView()
         VStack(alignment: .leading) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    NavigationCategoriesView(text: "Category 1")
-                    NavigationCategoriesView(text: "Category 2")
-                    NavigationCategoriesView(text: "Category 3")
-                }
-            }
-            .padding(.bottom)
             
             Text("What's new today")
                 .textCase(.uppercase)

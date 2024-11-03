@@ -1,6 +1,6 @@
 //
 //  NSCodingTransformer.swift
-//  combiningSqlAndSwift
+//  NewsApp
 //
 //  Created by Alex Kondratiev on 08.09.24.
 //

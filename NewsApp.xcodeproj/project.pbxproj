@@ -60,7 +60,7 @@
 		2E41B79C2CD1668E00A4F810 /* EventsDetailedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E41B7932CD1668E00A4F810 /* EventsDetailedView.swift */; };
 		2E43D6592C7A220F008357B6 /* connectionToAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E43D6582C7A220F008357B6 /* connectionToAPI.swift */; };
 		2E52B01F2C93422300790BEB /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E52B01E2C93422300790BEB /* ForgotPasswordView.swift */; };
-		2E52DB9B2C7B93F900EB140D /* combiningSqlAndSwift.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2E52DB992C7B93F900EB140D /* combiningSqlAndSwift.xcdatamodeld */; };
+		2E52DB9B2C7B93F900EB140D /* NewsApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2E52DB992C7B93F900EB140D /* NewsApp.xcdatamodeld */; };
 		2E58F75C2CA567E40014051E /* NewsArtilceSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E58F75B2CA567E40014051E /* NewsArtilceSummary.swift */; };
 		2E58F75E2CA568F10014051E /* SQLHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E58F75D2CA568F10014051E /* SQLHelper.swift */; };
 		2E5F7D7E2C9A0A64002D1570 /* EmailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E5F7D7D2C9A0A64002D1570 /* EmailService.swift */; };
@@ -175,7 +175,7 @@
 		2E41B7932CD1668E00A4F810 /* EventsDetailedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsDetailedView.swift; sourceTree = "<group>"; };
 		2E43D6582C7A220F008357B6 /* connectionToAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = connectionToAPI.swift; sourceTree = "<group>"; };
 		2E52B01E2C93422300790BEB /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
-		2E52DB9A2C7B93F900EB140D /* combiningSqlAndSwift.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = combiningSqlAndSwift.xcdatamodel; sourceTree = "<group>"; };
+		2E52DB9A2C7B93F900EB140D /* NewsApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NewsApp.xcdatamodel; sourceTree = "<group>"; };
 		2E58F75B2CA567E40014051E /* NewsArtilceSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsArtilceSummary.swift; sourceTree = "<group>"; };
 		2E58F75D2CA568F10014051E /* SQLHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLHelper.swift; sourceTree = "<group>"; };
 		2E5F7D7D2C9A0A64002D1570 /* EmailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailService.swift; sourceTree = "<group>"; };
@@ -390,7 +390,7 @@
 				2E93DB552C7F874000E51DB0 /* ViewModels */,
 				2EAEA3372C81C3CF0003DE4F /* Services */,
 				2E7DE1122C8D97C900139DB2 /* Helpers */,
-				2E52DB992C7B93F900EB140D /* combiningSqlAndSwift.xcdatamodeld */,
+				2E52DB992C7B93F900EB140D /* NewsApp.xcdatamodeld */,
 				2E7F5DE92C92339A007B50A0 /* EnvVars.plist */,
 				2E66B3682C738C8900DB0E0A /* Assets.xcassets */,
 				2E1651D72C750B2E00DA0560 /* AppDesign */,
@@ -655,7 +655,7 @@
 				2EF6E3472CC804F700AE9130 /* Event+CoreDataProperties.swift in Sources */,
 				2E52B01F2C93422300790BEB /* ForgotPasswordView.swift in Sources */,
 				2E66B36E2C738C8900DB0E0A /* Persistence.swift in Sources */,
-				2E52DB9B2C7B93F900EB140D /* combiningSqlAndSwift.xcdatamodeld in Sources */,
+				2E52DB9B2C7B93F900EB140D /* NewsApp.xcdatamodeld in Sources */,
 				2E0D47F92CB91CAF00290D18 /* ChangePasswordView.swift in Sources */,
 				2E7DE1192C8E2CE500139DB2 /* PreferencesTransformer.swift in Sources */,
 				2E26E89E2CB2A57400DA8B13 /* CustomPickerCategoryView.swift in Sources */,
@@ -1097,13 +1097,13 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		2E52DB992C7B93F900EB140D /* combiningSqlAndSwift.xcdatamodeld */ = {
+		2E52DB992C7B93F900EB140D /* NewsApp.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				2E52DB9A2C7B93F900EB140D /* combiningSqlAndSwift.xcdatamodel */,
+				2E52DB9A2C7B93F900EB140D /* NewsApp.xcdatamodel */,
 			);
-			currentVersion = 2E52DB9A2C7B93F900EB140D /* combiningSqlAndSwift.xcdatamodel */;
-			path = combiningSqlAndSwift.xcdatamodeld;
+			currentVersion = 2E52DB9A2C7B93F900EB140D /* NewsApp.xcdatamodel */;
+			path = NewsApp.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
