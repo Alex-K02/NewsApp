@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>expiration_time</key>
+	<integer>300</integer>
+	<key>api_link</key>
+	<string>http://127.0.0.1:5000/db/</string>
+	<key>jwt_key</key>
+	<string>jwt_key</string>
+	<key>articles_count</key>
+	<integer>30</integer>
+</dict>
+</plist>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23231" systemVersion="24A348" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="Article" representedClassName="Article" syncable="YES">
+        <attribute name="author" attributeType="String"/>
+        <attribute name="descrip" optional="YES" attributeType="String"/>
+        <attribute name="domain" attributeType="String"/>
+        <attribute name="downDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="link" attributeType="String"/>
+        <attribute name="maintext" attributeType="String"/>
+        <attribute name="pubDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="title" attributeType="String"/>
+        <relationship name="articleSummaryId" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ArticleSummary" inverseName="articleId" inverseEntity="ArticleSummary"/>
+    </entity>
+    <entity name="ArticleSummary" representedClassName="ArticleSummary" syncable="YES">
+        <attribute name="concepts" attributeType="String"/>
+        <attribute name="entities" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="subterms" attributeType="String"/>
+        <attribute name="terms" attributeType="String"/>
+        <attribute name="titles" attributeType="String"/>
+        <relationship name="articleId" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Article" inverseName="articleSummaryId" inverseEntity="Article"/>
+    </entity>
+    <entity name="Event" representedClassName="Event" syncable="YES">
+        <attribute name="end_date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="event_type" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="link" optional="YES" attributeType="String"/>
+        <attribute name="location" optional="YES" attributeType="String"/>
+        <attribute name="price" optional="YES" attributeType="String"/>
+        <attribute name="registration_link" optional="YES" attributeType="String"/>
+        <attribute name="speakers" optional="YES" attributeType="String"/>
+        <attribute name="sponsors" optional="YES" attributeType="String"/>
+        <attribute name="start_date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="summary" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="topics" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="User" representedClassName="User" syncable="YES">
+        <attribute name="dateOfBirth" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="email" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="password" attributeType="String"/>
+        <attribute name="salt" attributeType="String"/>
+        <relationship name="userIdPreference" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="UserPreference" inverseName="userId" inverseEntity="UserPreference"/>
+    </entity>
+    <entity name="UserPreference" representedClassName="UserPreference" syncable="YES">
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="preference" attributeType="Transformable" valueTransformerName="PreferencesTransformer" customClassName="Preferences"/>
+        <relationship name="userId" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="userIdPreference" inverseEntity="User"/>
+    </entity>
+</model>
