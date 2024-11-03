@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct combiningSqlAndSwiftApp: App {
+struct NewsAppApp: App {
     @Environment(\.scenePhase) private var scenePhase
     let persistenceController = PersistenceController.shared
     @StateObject private var authViewModel = AuthViewModel()
