@@ -9,8 +9,7 @@ import Foundation
 
 struct APIService {
     var apiURL: String
-    var lastSyncTime: String
-    
+    var lastSyncTime: String?
     
     func fetchData(
         from table: String,
@@ -22,6 +21,7 @@ struct APIService {
         var response: URLResponse?
         
         var urlComponents = URLComponents(string: self.apiURL)!
+        
         // checking when was the latestSyncTime
         if let latestSyncTime {
             urlComponents.queryItems = [

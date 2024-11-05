@@ -123,7 +123,7 @@ struct ProfileView: View {
         let eventIDs = userPreference?.preference?.eventIDs ?? []
 
         return VStack {
-            if eventsListViewModel.isLoading {
+            if isLoading {
                 ProgressView("Loading articles...")
             } else if events.isEmpty {
                 Text("No events found.")
@@ -152,7 +152,7 @@ struct ProfileView: View {
     
     private func articleContentView(userPreference: UserPreference?) -> some View {
         VStack {
-            if articleListViewModel.isLoading {
+            if isLoading {
                 VStack {
                     ProgressView("Loading articles...")
                 }
@@ -240,19 +240,19 @@ struct ProfileView: View {
     // MARK: - LoadFunctions
     private func loadArticles() async {
         do {
-            articles = articleListViewModel.articles
-            events = eventsListViewModel.events
+            articles = articleListViewModel.items
+            events = eventsListViewModel.items
             if articles.isEmpty {
-                articles = await articleListViewModel.fetchArticles()
+                articles = await articleListViewModel.fetchItems()
             }
             if events.isEmpty {
-                events = await eventsListViewModel.fetchEvents()
+                events = await eventsListViewModel.fetchItems()
             }
         }
         catch {
             print(error.localizedDescription)
         }
-        articleListViewModel.isLoading = false
+        isLoading = false
     }
 
     func loadUserData() async {

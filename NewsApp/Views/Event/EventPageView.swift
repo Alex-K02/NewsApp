@@ -27,7 +27,6 @@ struct EventPageView: View {
     
     var body: some View {
         NavigationStack {
-            //LogoNameView()
             if isLoading {
                 ProgressView("Loading articles...")
                     .padding()
@@ -59,22 +58,13 @@ struct EventPageView: View {
                         
                         ScrollView {
                             LazyVStack {
-                                let currentDateEvents = events[extractDay(from: selectedDate)]
-                                
-                                if let currentDateEvents {
-                                    ForEach(currentDateEvents, id: \.self) {event in
-                                        //doesn't work
-//                                        if let eventId = event.id, userFavoriteEvents.contains(eventId.uuidString) {
-//                                            EventBlockView(userPreference: userPreference ?? nil, event: event, isMarked: $isEventMarkedFavorite)
-//                                        }
-//                                        else {
-//                                            EventBlockView(userPreference: userPreference ?? nil, event: event, isMarked: $isEventMarkedFavorite)
-//                                        }
+                                if let currentDateEvents = events[extractDay(from: selectedDate)] {
+                                    ForEach(currentDateEvents, id: \.self) { event in
                                         EventBlockView(event: event)
                                     }
-                                }
-                                else {
-                                    Text("There is no events on the day :(")
+                                } else {
+                                    Text("There are no events on this day :(")
+                                        .foregroundColor(.gray)
                                 }
                             }
                         }
@@ -85,14 +75,20 @@ struct EventPageView: View {
             }
         }
         .task {
+            loadEvents()
+        }
+    }
+    
+    private func loadEvents() {
+        Task {
             await loadUserPreference()
-            var fetchedEvents = eventsListViewModel.events
-            if fetchedEvents.isEmpty {
-                fetchedEvents = await eventsListViewModel.fetchEvents()
+            
+            if eventsListViewModel.items.isEmpty {
+                let fetchedEvents = await eventsListViewModel.fetchItems()
+                events = Dictionary(grouping: fetchedEvents, by: { extractDay(from: $0.start_date!) })
+            } else {
+                events = Dictionary(grouping: eventsListViewModel.items, by: { extractDay(from: $0.start_date!) })
             }
-            
-            events = Dictionary(grouping: fetchedEvents, by: { extractDay(from: $0.start_date!)})
-            
             isLoading = false
         }
     }

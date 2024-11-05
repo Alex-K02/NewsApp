@@ -92,7 +92,13 @@ struct AllEventsPageView: View {
     // Load events and user preferences asynchronously
     private func loadEventsAndPreferences() async {
         do {
-            let fetchedEvents = await fetchEventsIfNeeded()
+            var fetchedEvents: [Event] = []
+            if eventsListViewModel.items.isEmpty {
+                fetchedEvents = await eventsListViewModel.fetchItems(lastSyncTime: "")
+            }
+            else {
+                fetchedEvents = eventsListViewModel.items
+            }
             events = Dictionary(grouping: fetchedEvents, by: { extractYear(from: $0.start_date!) })
             await loadUserPreference()
             isLoading = false
@@ -100,15 +106,6 @@ struct AllEventsPageView: View {
             print("Error loading events or user preferences: \(error)")
             isLoading = false
         }
-    }
-    
-    // Fetch events if they haven't already been loaded
-    private func fetchEventsIfNeeded() async -> [Event] {
-        var fetchedEvents = eventsListViewModel.events
-        if fetchedEvents.isEmpty {
-            fetchedEvents = await eventsListViewModel.fetchEvents()
-        }
-        return fetchedEvents
     }
     
     // Load user preferences from CoreData

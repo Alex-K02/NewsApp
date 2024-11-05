@@ -83,9 +83,12 @@ struct CustomCalendar: View {
             }
         }
         .task {
-            var fetchedEvents = eventsListViewModel.events
-            if fetchedEvents.isEmpty {
-                fetchedEvents = await eventsListViewModel.fetchEvents()
+            var fetchedEvents: [Event] = []
+            if eventsListViewModel.items.isEmpty {
+                fetchedEvents = await eventsListViewModel.fetchItems(lastSyncTime: "")
+            }
+            else {
+                fetchedEvents = eventsListViewModel.items
             }
             events = Dictionary(grouping: fetchedEvents, by: { extractDay(from: $0.start_date!)})
         }

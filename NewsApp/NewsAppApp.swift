@@ -12,15 +12,11 @@ struct NewsAppApp: App {
     @Environment(\.scenePhase) private var scenePhase
     let persistenceController = PersistenceController.shared
     @StateObject private var authViewModel = AuthViewModel()
-    @StateObject private var articleListViewModel: ArticlesListViewModel
-    @StateObject private var eventsListViewModel: EventsListViewModel
     @StateObject private var coreDataService: CoreDataService
     
     init() {
         let coreDataService = CoreDataService(viewContext: persistenceController.container.viewContext)
         _coreDataService = StateObject(wrappedValue: coreDataService)
-        _articleListViewModel = StateObject(wrappedValue: ArticlesListViewModel(coreDataService: coreDataService))
-        _eventsListViewModel = StateObject(wrappedValue: EventsListViewModel(coreDataService: coreDataService))
         NotificationManager.shared.requestPermission { success in
             if success {
                 print("Permission granted!")
@@ -38,8 +34,8 @@ struct NewsAppApp: App {
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
                     .environmentObject(coreDataService)
                     .environmentObject(authViewModel)
-                    .environmentObject(articleListViewModel)
-                    .environmentObject(eventsListViewModel)
+                    .environmentObject(EventsListViewModel(coreDataService: coreDataService))
+                    .environmentObject(ArticlesListViewModel(coreDataService: coreDataService))
                     .onAppear() {
                         UNUserNotificationCenter.current().setBadgeCount(0)
                     }
@@ -49,8 +45,8 @@ struct NewsAppApp: App {
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
                     .environmentObject(coreDataService)
                     .environmentObject(authViewModel)
-                    .environmentObject(articleListViewModel)
-                    .environmentObject(eventsListViewModel)
+                    .environmentObject(EventsListViewModel(coreDataService: coreDataService))
+                    .environmentObject(ArticlesListViewModel(coreDataService: coreDataService))
             }
         }
         
@@ -67,7 +63,7 @@ struct NewsAppApp: App {
             else if newScenePhase == .active {
                 Task {
                     do {
-                        try await coreDataService.enablePeriodicDataSync(articleListViewModel: articleListViewModel)
+                        try await coreDataService.enablePeriodicDataSync(articleListViewModel: ArticlesListViewModel(coreDataService: coreDataService))
                     } catch {
                         print("Error enabling periodic sync: \(error)")
                     }

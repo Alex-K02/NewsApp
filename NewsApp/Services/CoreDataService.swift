@@ -25,24 +25,13 @@ class CoreDataService: ObservableObject {
         self.viewContext = viewContext
     }
     
-    public func printCoreDataStoreLocation() {
-        let container = NSPersistentContainer(name: "NewsApp")
-        container.loadPersistentStores { (storeDescription, error) in
-            if let error = error {
-                print("Unresolved error \(error), \(error.localizedDescription)")
-            } else {
-                if let url = storeDescription.url {
-                    print("Core Data store URL: \(url.absoluteString)")
-                }
-            }
-        }
-    }
     
+    //MARK: - Event Functions
     public func loadEvents(eventsListViewModel: EventsListViewModel) async throws -> [Event] {
         var fetchedEvents: [Event] = []
         fetchedEvents = try await self.extractDataFromCoreData() as [Event]
         if fetchedEvents.isEmpty {
-            fetchedEvents = await eventsListViewModel.fetchEvents()
+            fetchedEvents = await eventsListViewModel.fetchItems()
         }
         fetchedEvents = fetchedEvents.sorted { event1, event2 in
             guard let date1 = event1.start_date else { return false }
@@ -259,17 +248,6 @@ class CoreDataService: ObservableObject {
             return false
         }
     }
-    //for the case when the date has more priority
-//         return articles.sorted {
-//            if let date1 = $0.article.pubDate, let date2 = $1.article.pubDate {
-//                // First, sort by pubDate in descending order
-//                if date1 != date2 {
-//                    return date1 > date2
-//                }
-//            }
-//            // If pubDate is the same, sort by score in descending order
-//            return $0.score > $1.score
-//        }
     
     
     private func findMatchings(userArticleSummary: String, articleSummary: String, scoreIncrement: Double) async throws -> Double {
@@ -306,7 +284,7 @@ class CoreDataService: ObservableObject {
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             
             while !Task.isCancelled { // Check if the task has been cancelled
-                let fetchedArticles = await articleListViewModel.fetchArticles(lastSyncTime: lastSyncTime)
+                let fetchedArticles = await articleListViewModel.fetchItems(lastSyncTime: lastSyncTime)
                 
                 do {
                     let articleScores = try await evaluateArticles(newArticles: fetchedArticles)

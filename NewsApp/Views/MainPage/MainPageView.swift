@@ -30,44 +30,7 @@ struct MainPageView: View {
     var body: some View {
         NavigationStack {
             TabView(selection: $selection) {
-                ScrollView {
-                    VStack {
-                        if articleListViewModel.isLoading {
-                            ProgressView("Loading articles...")
-                                .padding()
-                        } else if articles.isEmpty {
-                            Text("No articles found...")
-                                .padding()
-                        } else {
-                            let halfOfArray = Array(articles.prefix(articles.count / 2))
-                            FirstPartMainView(articles: halfOfArray, articleAllocations: self.defineArticleAllocation(articles: halfOfArray))
-                            BrowseAllMainView(articles: Array(articles.suffix(from: (articles.count / 2) + 1)))
-                        }
-                    }
-                    .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height, alignment: .center)
-                }
-                .task {
-                    do {
-                        articles = articleListViewModel.articles
-                        if articles.isEmpty {
-                            articles = await articleListViewModel.fetchArticles()
-                        }
-                        // Evaluate articles (assuming this scores the articles)
-                        let articleScores = try await coreDataService.evaluateArticles(newArticles: articles)
-                        // Sort by date and score, returning the sorted articles
-                        let sortedArticleScores = try await coreDataService.sortByDateAndScore(articles: articleScores)
-                        // Extract only the articles from the sorted list
-                        if !sortedArticleScores.isEmpty {
-                            self.articles = sortedArticleScores.map(\.article)
-                        }
-                        
-                        self.isLoading = false
-                    } catch {
-                        // Handle any errors that occur in the chain
-                        print("Error loading and processing articles: \(error)")
-                        print("Error loading events: \(error.localizedDescription)")
-                    }
-                }
+                MainTabContentView(articles: $articles, isLoading: $isLoading, articleListViewModel: articleListViewModel, coreDataService: coreDataService)
                 .tabItem {
                     Label("Main", systemImage: "newspaper")
                 }
@@ -85,6 +48,59 @@ struct MainPageView: View {
                     }
                     .tag(Tab.account)
             }
+        }
+        .task {
+            await loadArticles()
+        }
+        
+    }
+    
+    
+    // Async function to load articles
+    private func loadArticles() async {
+        do {
+            var fetchedArticles = articleListViewModel.items
+            if fetchedArticles.isEmpty {
+                fetchedArticles = await articleListViewModel.fetchItems()
+            }
+            let evaluatedArticles = try await coreDataService.evaluateArticles(newArticles: fetchedArticles)
+            let sortedArticles = try await coreDataService.sortByDateAndScore(articles: evaluatedArticles)
+            
+            if !sortedArticles.isEmpty {
+                articles = sortedArticles.map(\.article)
+            }
+            else {
+                articles = articleListViewModel.items
+            }
+            isLoading = false
+        } catch {
+            print("Error loading articles: \(error.localizedDescription)")
+        }
+    }
+}
+
+struct MainTabContentView: View {
+    @Binding var articles: [Article]
+    @Binding var isLoading: Bool
+    @ObservedObject var articleListViewModel: ArticlesListViewModel
+    let coreDataService: CoreDataService
+    
+    var body: some View {
+        ScrollView {
+            VStack {
+                if isLoading {
+                    ProgressView("Loading articles...")
+                        .padding()
+                } else if articles.isEmpty {
+                    Text("No articles found...")
+                        .padding()
+                } else {
+                    let halfOfArray = Array(articles.prefix(articles.count / 2))
+                    FirstPartMainView(articles: halfOfArray, articleAllocations: self.defineArticleAllocation(articles: halfOfArray))
+                    BrowseAllMainView(articles: Array(articles.suffix(from: (articles.count / 2) + 1)))
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height, alignment: .center)
         }
     }
     
