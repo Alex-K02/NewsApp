@@ -1,6 +1,6 @@
 # NewsApp "AboutIT"
 
-This app offers a personalized platform for browsing, managing, and engaging with news articles and events, tailored to user interests. Leveraging an external Scraper Module (available in a separate repository), the app gathers and stores data in a centralized database, making it accessible through a user-friendly API for dynamic display in the app. Core features include user preferences and secure storage. An AI-driven event parsing system that ensures users stay up-to-date with the latest content relevant to them.
+This app is a personalized platform for discovering and managing IT industry news and events, customized to match user interests. It uses an external Scraper Module (from a separate repository) to gather and store data in a central database. This data is accessible through an easy-to-use API, enabling dynamic updates within the app. Key features include personalized user preferences, secure data storage, and an AI-powered event parsing system to keep users updated with the latest relevant content.
 
 ## Main Functionality
 ### Core Data Integration
