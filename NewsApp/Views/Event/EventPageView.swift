@@ -46,7 +46,10 @@ struct EventPageView: View {
                         HStack {
                             Image(systemName: "list.bullet")
                                 .imageScale(.large)
-                            NavigationLink(destination: AllEventsPageView()) {
+                            NavigationLink(destination:
+                                AllEventsPageView()
+                                    .environmentObject(eventsListViewModel)
+                            ) {
                                 Text("View all")
                                     .font(.title2)
                                     .underline()
@@ -82,13 +85,11 @@ struct EventPageView: View {
     private func loadEvents() {
         Task {
             await loadUserPreference()
-            
-            if eventsListViewModel.items.isEmpty {
-                let fetchedEvents = await eventsListViewModel.fetchItems()
-                events = Dictionary(grouping: fetchedEvents, by: { extractDay(from: $0.start_date!) })
-            } else {
-                events = Dictionary(grouping: eventsListViewModel.items, by: { extractDay(from: $0.start_date!) })
+            var fetchedEvents = eventsListViewModel.items
+            if fetchedEvents.isEmpty {
+                fetchedEvents = await eventsListViewModel.fetchItems()
             }
+            events = Dictionary(grouping: fetchedEvents, by: { extractDay(from: $0.start_date!) })
             isLoading = false
         }
     }

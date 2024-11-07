@@ -78,7 +78,6 @@
 		2E7F5DEA2C92339A007B50A0 /* EnvVars.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E7F5DE92C92339A007B50A0 /* EnvVars.plist */; };
 		2E8390EB2C94A55900676CDF /* ArticleCustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E8390EA2C94A55900676CDF /* ArticleCustomView.swift */; };
 		2E93DB532C7F866600E51DB0 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E93DB522C7F866600E51DB0 /* APIService.swift */; };
-		2ECDD5D42CCE9D3B00887310 /* ArticleHorizontalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECDD5D32CCE9D3B00887310 /* ArticleHorizontalView.swift */; };
 		2EEECB272CB3EC77007490F2 /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEECB262CB3EC76007490F2 /* PushNotificationService.swift */; };
 		2EEFABB32C861776001405DD /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEFABB22C861776001405DD /* CoreDataService.swift */; };
 		2EF0DF542C739DEA00D14B8C /* MySQLKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2EF0DF532C739DEA00D14B8C /* MySQLKit */; };
@@ -189,7 +188,6 @@
 		2E7F5DE92C92339A007B50A0 /* EnvVars.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = EnvVars.plist; sourceTree = "<group>"; };
 		2E8390EA2C94A55900676CDF /* ArticleCustomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleCustomView.swift; sourceTree = "<group>"; };
 		2E93DB522C7F866600E51DB0 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
-		2ECDD5D32CCE9D3B00887310 /* ArticleHorizontalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleHorizontalView.swift; sourceTree = "<group>"; };
 		2EEECB262CB3EC76007490F2 /* PushNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationService.swift; sourceTree = "<group>"; };
 		2EEFABB22C861776001405DD /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		2EF6E3442CC804F700AE9130 /* Event+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -471,7 +469,6 @@
 			isa = PBXGroup;
 			children = (
 				2E2147F72C74F3140040BCAE /* ArticleDetailedView.swift */,
-				2ECDD5D32CCE9D3B00887310 /* ArticleHorizontalView.swift */,
 			);
 			path = ArticlePageComponents;
 			sourceTree = "<group>";
@@ -692,7 +689,6 @@
 				2EEECB272CB3EC77007490F2 /* PushNotificationService.swift in Sources */,
 				2E1776BD2C8B76C000547820 /* RegistrationView.swift in Sources */,
 				2E7D77BD2CDA781D00A14BC9 /* BaseListViewModel.swift in Sources */,
-				2ECDD5D42CCE9D3B00887310 /* ArticleHorizontalView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

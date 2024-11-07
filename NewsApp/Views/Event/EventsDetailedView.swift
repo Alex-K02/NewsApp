@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct EventsDetailedView: View {
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
     @EnvironmentObject private var coreDataService: CoreDataService
     
     let event: Event
@@ -28,8 +29,7 @@ struct EventsDetailedView: View {
                         Rectangle()
                             .fill(Color.white)
                             .frame(width: 1) // Vertical divider
-                        //FIXME: - create a date formatter
-                        IconLabel(iconName: "calendar", label: "November 28, 2025")
+                        IconLabel(iconName: "calendar", label: convertDateToString(startDate: event.start_date, endDate: event.end_date))
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
                     
@@ -82,8 +82,10 @@ struct EventsDetailedView: View {
                         .font(.body)
                         .padding(.horizontal)
                         .padding(.top)
-                    Button("Join WWDC 2025") {
-                        print("sending user to the website")
+                    Button("Join \(event.title ?? "")") {
+                        if let url = URL(string: event.registration_link ?? event.link ?? "") {
+                            openURL(url)
+                        }
                     }
                     .frame(maxWidth: .infinity)
                     .accentColor(.white)
@@ -104,6 +106,33 @@ struct EventsDetailedView: View {
             })
         }
         .navigationBarBackButtonHidden(true)
+    }
+    
+    func convertDateToString(startDate: Date?, endDate: Date?) -> String {
+        guard let startDate, let endDate else { return "Error: No date provided." }
+        //fomatters
+        let dayFormatter = DateFormatter()
+        dayFormatter.dateFormat = "d"
+        let monthFormatter = DateFormatter()
+        monthFormatter.dateFormat = "MMM"
+        let yearFormatter = DateFormatter()
+        yearFormatter.dateFormat = "yyyy"
+        //
+        let strStartDate = dayFormatter.string(from: startDate)
+        let strEndDate = dayFormatter.string(from: endDate)
+        
+        let year = yearFormatter.string(from: startDate)
+        
+        
+        if startDate.monthInt == endDate.monthInt {
+            let month = monthFormatter.string(from: startDate)
+            return "\(month) \(strStartDate) - \(strEndDate), \(year) "
+        }
+        else {
+            let startMonth = monthFormatter.string(from: startDate)
+            let endMonth = monthFormatter.string(from: endDate)
+            return "\(startMonth) \(strStartDate) - \(endMonth) \(strEndDate), \(year) "
+        }
     }
 }
 

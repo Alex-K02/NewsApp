@@ -12,6 +12,7 @@ struct EventBlockView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject private var coreDataService: CoreDataService
     @EnvironmentObject private var authViewModel: AuthViewModel
+    @EnvironmentObject private var eventsListViewModel: EventsListViewModel
     
     @State private var userId: String?
     @State private var userPreference: UserPreference?
@@ -22,7 +23,9 @@ struct EventBlockView: View {
     
     
     var body: some View {
-        NavigationLink(destination: EventsDetailedView(event: event)) {
+        NavigationLink(destination:
+            EventsDetailedView(event: event)
+        ) {
             HStack(alignment: .top) {
                 Image(systemName: "calendar")
                     .imageScale(.large)

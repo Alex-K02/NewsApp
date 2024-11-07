@@ -17,7 +17,6 @@ struct AllEventsPageView: View {
     @State private var selectedDate: Date = .init()
     @State private var isLoading: Bool = true
     
-    //@State private var events: [Event] = []
     @State private var events: [Int: [Event]] = [:]
     @State private var isEventMarkedFavorite: Bool = false
     @State private var userFavoriteEvents: [String] = []
@@ -92,12 +91,9 @@ struct AllEventsPageView: View {
     // Load events and user preferences asynchronously
     private func loadEventsAndPreferences() async {
         do {
-            var fetchedEvents: [Event] = []
-            if eventsListViewModel.items.isEmpty {
+            var fetchedEvents = eventsListViewModel.items
+            if fetchedEvents.isEmpty {
                 fetchedEvents = await eventsListViewModel.fetchItems(lastSyncTime: "")
-            }
-            else {
-                fetchedEvents = eventsListViewModel.items
             }
             events = Dictionary(grouping: fetchedEvents, by: { extractYear(from: $0.start_date!) })
             await loadUserPreference()

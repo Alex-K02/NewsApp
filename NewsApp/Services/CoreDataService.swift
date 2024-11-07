@@ -307,7 +307,7 @@ class CoreDataService: ObservableObject {
     func disablePeriodicDataSync() async {
         syncTask?.cancel() // Cancel the task to stop fetching
         syncTask = nil
-        print("I stopped fetching articles...")
+        print("I stopped fetching articles...", Date.now)
     }
     
     //MARK: - HandlingUserInput

@@ -13,10 +13,14 @@ struct NewsAppApp: App {
     let persistenceController = PersistenceController.shared
     @StateObject private var authViewModel = AuthViewModel()
     @StateObject private var coreDataService: CoreDataService
+    @StateObject private var eventsListViewModel: EventsListViewModel
+    @StateObject private var articlesListViewModel: ArticlesListViewModel
     
     init() {
         let coreDataService = CoreDataService(viewContext: persistenceController.container.viewContext)
         _coreDataService = StateObject(wrappedValue: coreDataService)
+        _eventsListViewModel = StateObject(wrappedValue: EventsListViewModel(coreDataService: coreDataService))
+        _articlesListViewModel = StateObject(wrappedValue: ArticlesListViewModel(coreDataService: coreDataService))
         NotificationManager.shared.requestPermission { success in
             if success {
                 print("Permission granted!")
@@ -34,8 +38,8 @@ struct NewsAppApp: App {
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
                     .environmentObject(coreDataService)
                     .environmentObject(authViewModel)
-                    .environmentObject(EventsListViewModel(coreDataService: coreDataService))
-                    .environmentObject(ArticlesListViewModel(coreDataService: coreDataService))
+                    .environmentObject(eventsListViewModel)
+                    .environmentObject(articlesListViewModel)
                     .onAppear() {
                         UNUserNotificationCenter.current().setBadgeCount(0)
                     }
@@ -45,8 +49,8 @@ struct NewsAppApp: App {
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
                     .environmentObject(coreDataService)
                     .environmentObject(authViewModel)
-                    .environmentObject(EventsListViewModel(coreDataService: coreDataService))
-                    .environmentObject(ArticlesListViewModel(coreDataService: coreDataService))
+                    .environmentObject(eventsListViewModel)
+                    .environmentObject(articlesListViewModel)
             }
         }
         
