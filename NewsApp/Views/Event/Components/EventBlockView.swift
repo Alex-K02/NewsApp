@@ -42,6 +42,7 @@ struct EventBlockView: View {
                     Text(event.title ?? "Error: No title provided")
                         .font(.title3)
                         .fontWeight(.semibold)
+                        .multilineTextAlignment(.leading)
                     
                     VStack(alignment: .leading, spacing: 5) {
                         Text("\(convertDateToString(date: event.start_date ?? nil))")

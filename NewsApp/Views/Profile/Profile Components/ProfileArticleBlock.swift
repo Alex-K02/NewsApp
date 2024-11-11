@@ -37,6 +37,7 @@ struct ProfileArticleBlockView: View {
                     Spacer()
                 }
                 .padding(.horizontal, 10)
+                .accentColor(.black)
                 
                 Spacer()
                 

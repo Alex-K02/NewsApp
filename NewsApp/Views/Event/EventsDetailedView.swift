@@ -13,99 +13,118 @@ struct EventsDetailedView: View {
     @EnvironmentObject private var coreDataService: CoreDataService
     
     let event: Event
+    @State private var isEventUnique: Bool = true
     
     var body: some View {
-        Text(event.title ?? "Error: No title")
-            .font(.largeTitle)
-            .fontWeight(.bold)
-        
-        ScrollView {
-            VStack {
-                Grid {
-                    GridRow {
-                        IconLabel(iconName: "mappin.and.ellipse", label: event.location ?? "Location is not available yet")
-                            .frame(maxWidth: .infinity, alignment: .center)
+        VStack {
+            Text(event.title ?? "Error: No title")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+            
+            ScrollView {
+                VStack {
+                    Grid {
+                        GridRow {
+                            IconLabel(iconName: "mappin.and.ellipse", label: event.location ?? "Location is not available yet")
+                                .frame(maxWidth: .infinity, alignment: .center)
+                            
+                            Rectangle()
+                                .fill(Color.white)
+                                .frame(width: 1) // Vertical divider
+                            IconLabel(iconName: "calendar", label: convertDateToString(startDate: event.start_date, endDate: event.end_date))
+                                .frame(maxWidth: .infinity, alignment: .center)
+                        }
                         
-                        Rectangle()
-                            .fill(Color.white)
-                            .frame(width: 1) // Vertical divider
-                        IconLabel(iconName: "calendar", label: convertDateToString(startDate: event.start_date, endDate: event.end_date))
-                            .frame(maxWidth: .infinity, alignment: .center)
-                    }
-                    
-                    Divider()
-                        .frame(height: 1.2)
-                        .background(Color.white) // Horizontal divider
-                        .padding(.horizontal)
-                    
-                    GridRow {
-                        IconLabel(iconName: "person.2.fill", label: event.event_type ?? "Event type is not available yet")
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(.vertical, 10)
+                        Divider()
+                            .frame(height: 1.2)
+                            .background(Color.white) // Horizontal divider
+                            .padding(.horizontal)
                         
-                        Rectangle()
-                            .fill(Color.white)
-                            .frame(width: 1) // Vertical divider
-                        
-                        IconLabel(iconName: "dollarsign", label: event.price ?? "Price is not available yet")
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(.vertical, 10)
-                    }
-                }
-                .padding()
-                .background(EventGradientBackground())
-                .cornerRadius(10)
-                .padding(.horizontal, 10)
-                .padding(.bottom)
-                
-                HStack {
-                    Image(systemName: "i.circle")
-                    Text(event.summary ?? "Error: No summary available")
-                        .foregroundStyle(.secondary)
-                        .font(.headline)
-                }
-                .padding(.horizontal, 10)
-                .padding(.bottom)
-                
-                HStack(spacing: 100) {
-                    ListBlockView(iconName: "person", label: "Speakers", data: event.speakers ?? "")
-                    ListBlockView(iconName: "dollarsign", label: "Sponsors", data: event.sponsors ?? "")
-                }
-                .padding(.bottom)
-                
-                Spacer()
-                
-                VStack(alignment: .center) {
-                    Text("Be Part of the Future of Tech – Get Your Spot at \(event.title ?? "") Before Tickets Run Out!")
-                        .multilineTextAlignment(.center)
-                        .foregroundStyle(.white)
-                        .font(.body)
-                        .padding(.horizontal)
-                        .padding(.top)
-                    Button("Join \(event.title ?? "")") {
-                        if let url = URL(string: event.registration_link ?? event.link ?? "") {
-                            openURL(url)
+                        GridRow {
+                            IconLabel(iconName: "person.2.fill", label: event.event_type ?? "Event type is not available yet")
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.vertical, 10)
+                            
+                            Rectangle()
+                                .fill(Color.white)
+                                .frame(width: 1) // Vertical divider
+                            
+                            IconLabel(iconName: "dollarsign", label: event.price ?? "Price is not available yet")
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.vertical, 10)
                         }
                     }
-                    .frame(maxWidth: .infinity)
-                    .accentColor(.white)
                     .padding()
-                    .background(Color(red: 0.349, green: 0.125, blue: 0.933))// #5920ee
-                    .cornerRadius(20)
-                    .padding()
+                    .background(EventGradientBackground())
+                    .cornerRadius(10)
+                    .padding(.horizontal, 10)
+                    .padding(.bottom)
+                    
+                    HStack {
+                        Image(systemName: "i.circle")
+                        Text(event.summary ?? "Error: No summary available")
+                            .foregroundStyle(.secondary)
+                            .font(.headline)
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.bottom)
+                    
+                    HStack(spacing: 100) {
+                        ListBlockView(iconName: "person", label: "Speakers", data: event.speakers ?? "")
+                        ListBlockView(iconName: "dollarsign", label: "Sponsors", data: event.sponsors ?? "")
+                    }
+                    .padding(.bottom)
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .center) {
+                        Text("Be Part of the Future of Tech – Get Your Spot at \(event.title ?? "this Event.") Before Tickets Run Out!")
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(.white)
+                            .font(.body)
+                            .padding(.horizontal)
+                            .padding(.top)
+                        Button("Join \(event.title ?? "Event")") {
+                            if let url = URL(string: event.registration_link ?? event.link ?? "") {
+                                openURL(url)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .accentColor(.white)
+                        .padding()
+                        .background(Color(red: 0.349, green: 0.125, blue: 0.933))// #5920ee
+                        .cornerRadius(20)
+                        .padding()
+                    }
+                    .background(
+                        EventGradientBackground()
+                    )
+                    .cornerRadius(10)
                 }
-                .background(
-                    EventGradientBackground()
-                )
-                .cornerRadius(10)
+                .padding(.horizontal, 10)
+                
+                SaveEventButtonView(
+                    title: isEventUnique ? "Save this event to your calendar" : "Saved to the calendar",
+                    imageName: isEventUnique ? "bookmark" : "bookmark.fill",
+                    action: {
+                        if isEventUnique {
+                            CalendarService.shared.saveEvent(with: event)
+                            isEventUnique.toggle()
+                        }
+                        else {
+                            CalendarService.shared.openEventInCalendar(with: event)
+                        }
+                })
+                
+                EventsBackButtonView(action: {
+                    dismiss()
+                })
             }
-            .padding(.horizontal, 10)
-            
-            EventsBackButtonView(action: {
-                dismiss()
-            })
+            .navigationBarBackButtonHidden(true)
         }
-        .navigationBarBackButtonHidden(true)
+        .task {
+            isEventUnique = CalendarService.shared.isEventUnique(event)
+        }
     }
     
     func convertDateToString(startDate: Date?, endDate: Date?) -> String {
@@ -196,9 +215,39 @@ struct IconLabel: View {
                 .padding(.bottom, 2)
             Text(label)
                 .foregroundColor(.white)
-                .fixedSize(horizontal: false, vertical: true) // Allows multiline text
-                .font(.system(size: 14))
+                .multilineTextAlignment(.center)
+                .font(.callout)
         }
+    }
+}
+
+struct SaveEventButtonView: View {
+    var title: String
+    var imageName: String
+    var action: () -> Void
+    
+    var body: some View {
+        Button(action: {
+            action()
+        }, label: {
+            VStack {
+                HStack(spacing: 5) {
+                    Text(title)
+                    Image(systemName: imageName)
+                }
+                .fontWeight(.semibold)
+                .foregroundStyle(.black)
+                .padding()
+            }
+            .frame(maxWidth: .infinity)
+            .background(.white)
+            .overlay {
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(.black, lineWidth: 3)
+            }
+            .padding(.top)
+            .padding(.horizontal)
+        })
     }
 }
 

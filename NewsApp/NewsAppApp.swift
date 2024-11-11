@@ -28,6 +28,7 @@ struct NewsAppApp: App {
                 print("Permission denied.")
             }
         }
+        CalendarService.shared.requestPermission()
     }
     
             

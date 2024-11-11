@@ -36,9 +36,7 @@ struct ProfileView: View {
     var body: some View {
         NavigationStack {
             if isLoading {
-                ProgressView("Loading...").onAppear {
-                    Task { await loadUserData() }
-                }
+                ProgressView("Loading...")
             } else {
                 if let userId = userId, let user = user {
                     ZStack {
@@ -73,8 +71,11 @@ struct ProfileView: View {
                 }
             }
         }
-        .task {
-            await loadArticles()
+        .onAppear() {
+            Task {
+                await loadArticles()
+                await reloadUserData()
+            }
         }
     }
 
@@ -122,7 +123,7 @@ struct ProfileView: View {
         let isFavoriteListEmpty = (userPreference?.preference?.eventIDs.isEmpty ?? true)
         let eventIDs = userPreference?.preference?.eventIDs ?? []
 
-        return VStack {
+        return VStack(spacing: 5) {
             if isLoading {
                 ProgressView("Loading articles...")
             } else if events.isEmpty {
@@ -142,8 +143,8 @@ struct ProfileView: View {
                                 })
                             }
                         }
-                        .padding()
                     }
+                    .padding()
                 }
             }
         }
@@ -171,8 +172,10 @@ struct ProfileView: View {
                     ScrollView {
                         ForEach(userPreference?.preference?.articleIDs ?? [], id: \.self) { id in
                             if let article = articles.first(where: { $0.id?.uuidString == id }) {
-                                ProfileArticleBlockView(showPopUp: $showPopUp, article: article) {
-                                    self.article = article
+                                NavigationLink(destination: ArticleDetailedView(article: article)) {
+                                    ProfileArticleBlockView(showPopUp: $showPopUp, article: article) {
+                                        self.article = article
+                                    }
                                 }
                             }
                         }

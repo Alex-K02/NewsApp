@@ -19,6 +19,7 @@ struct EventsBackButtonView: View {
                     Image(systemName: "arrow.left")
                     Text("Back")
                 }
+                .fontWeight(.semibold)
                 .foregroundStyle(.white)
                 .padding()
             }

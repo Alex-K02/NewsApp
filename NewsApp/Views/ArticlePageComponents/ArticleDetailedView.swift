@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ArticleDetailedView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.openURL) private var openURL
     @EnvironmentObject private var coreDataService: CoreDataService
     @EnvironmentObject private var authViewModel: AuthViewModel
     
@@ -16,6 +17,7 @@ struct ArticleDetailedView: View {
     @State private var userPreference: UserPreference?
     
     @State private var isLoading = true
+    @State private var gotoLogin: Bool = false
     
     @State private var isFavoriteArticle: Bool = false
     @State private var isFavoriteAuthor: Bool = false
@@ -41,6 +43,11 @@ struct ArticleDetailedView: View {
                         Text(article.title ?? "Error: No title provided")
                             .fontWeight(.bold)
                             .font(.title)
+                            .onTapGesture {
+                                if let url = URL(string: article.link ?? "") {
+                                    openURL(url)
+                                }
+                            }
                         
                         ScrollView(.horizontal, showsIndicators: false)  {
                             HStack {
@@ -116,6 +123,9 @@ struct ArticleDetailedView: View {
                     }
                     .padding(.horizontal)
                 }
+                .navigationDestination(isPresented: $gotoLogin) {
+                    LoginView()
+                }
             }
         }
         .toolbar {
@@ -123,11 +133,15 @@ struct ArticleDetailedView: View {
                 Button(action: {
                     isFavoriteArticle.toggle()
                     Task {
+                        guard let userPreference else {
+                            gotoLogin = true
+                            return
+                        }
                         if isFavoriteArticle {
-                            await coreDataService.saveUserPreferences(userPreference: userPreference!, article: article)
+                            await coreDataService.saveUserPreferences(userPreference: userPreference, article: article)
                         }
                         else {
-                            await coreDataService.removeUserPrefernces(userPreference: userPreference!, article: article)
+                            await coreDataService.removeUserPrefernces(userPreference: userPreference, article: article)
                         }
                     }
                 })
