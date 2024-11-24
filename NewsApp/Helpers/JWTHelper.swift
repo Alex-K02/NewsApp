@@ -85,7 +85,6 @@ struct JWTHelper {
             // Decode and verify the token
             _ = try signer.verify(token, as: Payload.self)
             return true
-            //print("Verified JWT Claims: \(payload)")
         } catch {
             print("Error verifying JWT: \(error)")
             return false

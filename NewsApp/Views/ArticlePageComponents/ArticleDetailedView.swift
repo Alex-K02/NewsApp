@@ -13,7 +13,6 @@ struct ArticleDetailedView: View {
     @EnvironmentObject private var coreDataService: CoreDataService
     @EnvironmentObject private var authViewModel: AuthViewModel
     
-    @State private var userId: String?
     @State private var userPreference: UserPreference?
     
     @State private var isLoading = true
@@ -34,7 +33,7 @@ struct ArticleDetailedView: View {
                 ProgressView("Loading...")
                     .onAppear {
                         Task {
-                            await loadUserPreference()
+                            try await loadUserPreference()
                         }
                     }
             } else {
@@ -93,10 +92,11 @@ struct ArticleDetailedView: View {
                                         Button {
                                             isFavoriteSite.toggle()
                                             Task {
+                                                guard let domain = article.domain else { return }
                                                 if !isFavoriteSite {
-                                                    await coreDataService.removeUserPrefernces(userPreference: userPreference!, domain: article.domain!)
+                                                    await coreDataService.removeUserPrefernces(userPreference: userPreference!, domain: FavoriteDomain(domain: domain, likedAt: Date()))
                                                 } else {
-                                                    await coreDataService.saveUserPreferences(userPreference: userPreference!, domain: article.domain!)
+                                                    await coreDataService.saveUserPreferences(userPreference: userPreference!, domain: FavoriteDomain(domain: domain, likedAt: Date()))
                                                 }
                                             }
                                         } label: {
@@ -124,7 +124,7 @@ struct ArticleDetailedView: View {
                     .padding(.horizontal)
                 }
                 .navigationDestination(isPresented: $gotoLogin) {
-                    LoginView()
+                    LoginPageView()
                 }
             }
         }
@@ -164,44 +164,30 @@ struct ArticleDetailedView: View {
         return formattedDate
     }
     
-    func loadUserPreference() async {
-        // Load JWT from Keychain
-        authViewModel.loadJWTFromKeychain()
-        
-        // Check if user is logged in
-        guard authViewModel.isUserLoggedIn(),
-              let loadedUserId = authViewModel.loadIdValue(token: authViewModel.userJWTSessionToken) else {
-            print("No user id loaded or user not logged in.")
-            return
-        }
-        
-        self.userId = loadedUserId
-        
-        // Fetch data from Core Data
-        Task {
-            let userPreferences = try await coreDataService.extractDataFromCoreData() as [UserPreference]
-            // Find user by ID
-            if let foundUserPreference = userPreferences.first(where: { $0.id?.uuidString == userId }){
-                self.userPreference = foundUserPreference
-                
-                let articleIds = foundUserPreference.preference?.articleIDs
-                if ((articleIds!.contains {$0 == article.id!.uuidString}))  {
-                    isFavoriteArticle = true
-                }
-                let authors = foundUserPreference.preference?.authors
-                if ((authors!.contains {$0 == article.author!}))  {
-                    isFavoriteAuthor = true
-                }
-                let domains = foundUserPreference.preference?.domains
-                if ((domains!.contains {$0 == article.domain!}))  {
-                    isFavoriteSite = true
-                }
-                
+    func loadUserPreference() async throws  {
+        if let userPreference = authViewModel.userPreference {
+            self.userPreference = userPreference
+        } else {
+            try await authViewModel.loadUserData()
+            if let loadedUserPreference = authViewModel.userPreference {
+                self.userPreference = loadedUserPreference
             } else {
-                print("User not found in Core Data.")
+                // Handle the case where user data couldn't be loaded
+                print("Failed to load user data.")
             }
-            isLoading = false
         }
+        //searching current article in users favorite
+        if let articleIDs = userPreference?.preference?.articleIDs, (articleIDs.contains {$0 == article.id!.uuidString}) {
+            isFavoriteArticle = true
+        }
+        if let authors = userPreference?.preference?.authors, (authors.contains {$0 == article.author!}) {
+            isFavoriteAuthor = true
+        }
+        //(domains.contains {$0 == article.domain!}
+        if let domains = userPreference?.preference?.domains, let articleDomain = article.domain, let domain = domains.first(where: {$0.domain == articleDomain}) {
+            isFavoriteSite = true
+        }
+        isLoading = false
     }
 }
 

@@ -10,14 +10,14 @@ import SwiftUI
 struct MiddlePopUpFavoriteContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject private var coreDataService: CoreDataService
-    @EnvironmentObject private var authViewModel: AuthViewModel
+    @EnvironmentObject private var authViewModel: AuthTokenManagerService
     
     let userPreference: UserPreference
     @Binding var isPopUpActive: Bool
     
     let article: Article?
     let author: String
-    let domain: String
+    let domain: FavoriteDomain?
     let event: Event?
     
     var body: some View {
@@ -73,5 +73,6 @@ struct MiddlePopUpFavoriteContentView: View {
     let userPreference = UserPreference(context: PersistenceController.shared.container.viewContext)
     let article = Article(context: PersistenceController.shared.container.viewContext)
     let event = Event(context: PersistenceController.shared.container.viewContext)
-    MiddlePopUpFavoriteContentView(userPreference: userPreference, isPopUpActive: $isPresented, article: article, author: "", domain: "", event: event)
+    let domain = FavoriteDomain(domain: "", likedAt: Date())
+    MiddlePopUpFavoriteContentView(userPreference: userPreference, isPopUpActive: $isPresented, article: article, author: "", domain: domain, event: event)
 }

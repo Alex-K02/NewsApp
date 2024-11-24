@@ -2,102 +2,106 @@
 //  AuthViewModel.swift
 //  NewsApp
 //
-//  Created by Alex Kondratiev on 11.09.24.
+//  Created by Alex Kondratiev on 22.11.24.
 //
 
 import Foundation
-import KeychainSwift
-
-protocol AuthenticationFormProtocol {
-    var formIsValid: Bool {get}
-}
-
-enum KeyExtractionError: Error {
-    case missingKey
-}
+import CoreData
 
 class AuthViewModel: ObservableObject {
-    @Published var userJWTSessionToken: String?
+    private let authTokenManager: AuthTokenManagerService = AuthTokenManagerService()
+    let coreDataService: CoreDataService
     
-    private let keychain = KeychainSwift()
-    private let jwtHelper = JWTHelper()
-    private let plistHelper = PlistHelper()
+    @Published var user: User? = nil
+    @Published var userPreference: UserPreference? = nil
     
-    private let key: String?
-    
-    init() {
-        // Handle optional value without throwing
-        if let loadedKey:String? = plistHelper.extractValueWithKey(key: "jwt_key") {
-            self.key = loadedKey!
+    init(coreDataService: CoreDataService) {
+        self.coreDataService = coreDataService
+        Task {
+            try await loadUserData()
         }
-        else {
-            self.key = nil
-            print("Warning: 'jwt_key' not found in plist")
+    }
+    
+    func isRememberMeEnabled() {
+        if !authTokenManager.loadRememberMeValue(token: authTokenManager.userJWTSessionToken) {
+            authTokenManager.removeJWTFromKeychain()
+        }
+    }
+    
+    func isUserLoggedIn() -> Bool {
+        // Load JWT from Keychain
+        authTokenManager.loadJWTFromKeychain()
+        // Check if user is logged in
+        guard authTokenManager.isUserLoggedIn(),
+              let loadedUserId = authTokenManager.loadIdValue(token: authTokenManager.userJWTSessionToken) else {
+            print("No user id loaded or user not logged in.")
+            return false
+        }
+        return true
+    }
+    
+    func loadUserData() async throws {
+        guard let userID = await loadUserID(), !userID.isEmpty else {
             return
         }
-        // Continue with further initialization
-        loadJWTFromKeychain()
-    }
-    
-    func loadIdValue(token: String?) -> String? {
-        guard token != nil else {
-            print("Error: No token provided")
-            return ""
+        //
+        do {
+            try await loadUser(with: userID)
+            try await loadUserPreference(with: userID)
         }
-        let token = keychain.get(key!)!
-        return jwtHelper.idDecoder(token: token, key: key!)!
-    }
-    
-    func loadRememberMeValue(token: String?) -> Bool {
-        guard token != nil else {
-            return true
-        }
-        let token = keychain.get(key!)!
-        return jwtHelper.rememberMeDecoder(token: token, key: key!)
-    }
-    
-    //how to get a token if it is bundeled with user
-    func storeJWTInKeychain(token: String) {
-        keychain.set(token, forKey: key!, withAccess: .accessibleWhenUnlockedThisDeviceOnly)
-        userJWTSessionToken = token
-    }
-    
-    func loadJWTFromKeychain() {
-        if let token = keychain.get(key!),
-           !token.isEmpty,
-           jwtHelper.verifyJWTToken(token, key: key!) {
-            userJWTSessionToken = token  // Set the retrieved token
-        } else {
-            print("User is not logged in or token is invalid")
-            userJWTSessionToken = nil  // No valid token found
+        catch {
+            throw AuthError.dataLoadingFailed
         }
     }
     
-    // Remove JWT from Keychain on logout
-    func removeJWTFromKeychain() {
-        keychain.delete(key!)
-        userJWTSessionToken = nil
+    func loadUserID() async -> String?{
+        // Load JWT from Keychain
+        authTokenManager.loadJWTFromKeychain()
+        // Check if user is logged in
+        guard authTokenManager.isUserLoggedIn(),
+              let loadedUserId = authTokenManager.loadIdValue(token: authTokenManager.userJWTSessionToken) else {
+            print("No user id loaded or user not logged in.")
+            return nil
+        }
+        return loadedUserId
     }
-
-    // Check if JWT exists and is valid
-    func isUserLoggedIn() -> Bool {
-        if let token = userJWTSessionToken {
-            // Here you can add logic to verify the token (e.g., decode it and check expiry)
-            if jwtHelper.verifyJWTToken(token, key: key!) {
-                return true
+    
+    @MainActor
+    func loadUser(with userID: String) async throws {
+        do {
+            if let foundUser = try await coreDataService.fetchUser(with: userID) {
+                self.user = foundUser
+            }
+            else {
+                throw AuthError.userNotFound
             }
         }
-        return false
+        catch {
+            throw AuthError.dataExtractionFailed
+        }
     }
+    
+    @MainActor
+    func loadUserPreference(with userID: String) async throws {
+        do {
+            let userPreferences: [UserPreference] = try await coreDataService.extractDataFromCoreData()
+            if let currentUserPreference = userPreferences.first(where: { $0.id?.uuidString == userID }) {
+                self.userPreference = currentUserPreference
+            }
+            else {
+                throw AuthError.userNotFound
+            }
+        }
+        catch {
+            throw AuthError.dataExtractionFailed
+        }
+    }
+}
 
-    func logOut() {
-        removeJWTFromKeychain()
-        userJWTSessionToken = nil  // Clear the user object
-    }
+//MARK: - Errors
 
-    // Handle user login
-    func logIn(user: User, rememberMe: Bool) {
-        let token = jwtHelper.generateJWTToken(user: user, key: key!, rememberMe: rememberMe)
-        storeJWTInKeychain(token: token!)
-    }
+enum AuthError: Error {
+    case userNotFound
+    case dataExtractionFailed
+    case dataLoadingFailed
 }

@@ -16,9 +16,9 @@ struct ProfileView: View {
 
     @State private var articles: [Article] = []
     @State private var events: [Event] = []
-    @State private var userId: String?
+    
     @State private var user: User?
-    @State private var userPreferences: UserPreference?
+    @State private var userPreference: UserPreference?
     
     @State private var isLoading = true
     @State private var showProfileEditPage = false
@@ -29,7 +29,7 @@ struct ProfileView: View {
     @State private var selectedTab: String = "Articles"
     //user preference params
     @State private var article: Article?
-    @State private var domain: String?
+    @State private var domain: FavoriteDomain?
     @State private var author = ""
     @State private var event: Event?
 
@@ -38,22 +38,22 @@ struct ProfileView: View {
             if isLoading {
                 ProgressView("Loading...")
             } else {
-                if let userId = userId, let user = user {
+                if let user = user {
                     ZStack {
                         VStack {
                             ProfileHeaderView(user: user)
                             EditProfileButtonView(showProfileEdit: $showProfileEditPage)
                             CustomPickerView(selectedTab: $selectedTab)
                             // Load view based on selected tab
-                            contentForSelectedTab(userPreference: userPreferences ?? nil)
+                            contentForSelectedTab(userPreference: userPreference ?? nil)
                         }
 
                         if showPopUp {
-                            if let userPreferences = userPreferences {
+                            if let userPreference = userPreference {
                                 MiddlePopUpView(
                                     text: "Are you sure you want to delete this favorite?",
                                     isPopUpActive: $showPopUp,
-                                    content: MiddlePopUpFavoriteContentView(userPreference: userPreferences, isPopUpActive: $showPopUp, article: article, author: author, domain: domain ?? "", event: event)
+                                    content: MiddlePopUpFavoriteContentView(userPreference: userPreference, isPopUpActive: $showPopUp, article: article, author: author, domain: domain ?? nil, event: event)
                                 )
                                 .transition(.move(edge: .bottom).combined(with: .opacity))
                             }
@@ -62,19 +62,19 @@ struct ProfileView: View {
                     .sheet(isPresented: $showProfileEditPage) {
                         EditProfileView()
                             .onDisappear {
-                                Task { await reloadUserData() }
+                                Task { loadUserData }
                             }
                     }
                 } else {
                     // Navigate to login view if user is not logged in
-                    LoginView()
+                    LoginPageView()
                 }
             }
         }
         .onAppear() {
             Task {
-                await loadArticles()
-                await reloadUserData()
+                try await loadUserData()
+                await loadData()
             }
         }
     }
@@ -91,7 +91,7 @@ struct ProfileView: View {
                 .font(.title2)
                 .fontWeight(.bold)
 
-            HStack {
+            HStack(spacing: 2) {
                 Text(user.email ?? "")
                     .font(.subheadline)
                     .accentColor(.black)
@@ -189,14 +189,14 @@ struct ProfileView: View {
     
     private func siteContentView() -> some View {
         ScrollView {
-            if userPreferences?.preference?.domains.count == 0 {
+            if userPreference?.preference?.domains.count == 0 {
                 Text("No favorite articles found.")
                     .padding()
             }
             else {
                 VStack(alignment: .leading) {
-                    ForEach(userPreferences?.preference?.domains ?? [], id: \.self) { domain in
-                        ProfileDomainBlockView(showPopUp: $showPopUp, addingDate: Date(), domain: domain) {
+                    ForEach(userPreference?.preference?.domains ?? [], id: \.self) { domain in
+                        ProfileDomainBlockView(showPopUp: $showPopUp, domain: domain) {
                             self.domain = domain
                         }
                     }
@@ -205,25 +205,25 @@ struct ProfileView: View {
             }
         }
         .frame(minWidth: 100, maxWidth: .infinity)
-        .background(userPreferences?.preference?.domains.count == 0 ? Color(.white) : Color(red: 242/256, green: 242/256, blue: 247/256))
+        .background(userPreference?.preference?.domains.count == 0 ? Color(.white) : Color(red: 242/256, green: 242/256, blue: 247/256))
     }
 
     private func authorContentView() -> some View {
         VStack {
-            if userPreferences?.preference?.authors.count == 0 {
+            if userPreference?.preference?.authors.count == 0 {
                 ScrollView {
                     Text("No favorite authors found.")
                         .padding()
                 }
             }
             else {
-                List(userPreferences?.preference?.authors ?? [], id: \.self) { author in
+                List(userPreference?.preference?.authors ?? [], id: \.self) { author in
                     HStack {
                         VStack(alignment: .leading) {
                             Text(author)
-                            Text("This is a sample review.")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+//                            Text("From: \(domain ?? "Not specified")")
+//                                .font(.subheadline)
+//                                .foregroundColor(.gray)
                         }
                         Spacer()
                         Button(action: {
@@ -241,45 +241,38 @@ struct ProfileView: View {
     }
     
     // MARK: - LoadFunctions
-    private func loadArticles() async {
+    private func loadUserData() async throws  {
+        //loading user-related information
         do {
-            articles = articleListViewModel.items
-            events = eventsListViewModel.items
-            if articles.isEmpty {
-                articles = await articleListViewModel.fetchItems()
-            }
-            if events.isEmpty {
-                events = await eventsListViewModel.fetchItems()
+            if let userPreference = authViewModel.userPreference, let user = authViewModel.user {
+                self.userPreference = userPreference
+                self.user = user
+            } else {
+                try await authViewModel.loadUserData()
+                if let loadedUserPreference = authViewModel.userPreference, let loadedUser = authViewModel.user {
+                    self.userPreference = loadedUserPreference
+                    self.user = loadedUser
+                } else {
+                    throw AuthError.dataLoadingFailed
+                }
             }
         }
         catch {
-            print(error.localizedDescription)
+            throw AuthError.userNotFound
+        }
+        
+    }
+    private func loadData() async {
+        //loading additional data
+        articles = articleListViewModel.items
+        events = eventsListViewModel.items
+        if articles.isEmpty {
+            articles = await articleListViewModel.fetchItems()
+        }
+        if events.isEmpty {
+            events = await eventsListViewModel.fetchItems()
         }
         isLoading = false
-    }
-
-    func loadUserData() async {
-        // Load JWT and check if user is logged in
-        authViewModel.loadJWTFromKeychain()
-        guard let loadedUserId = authViewModel.loadIdValue(token: authViewModel.userJWTSessionToken), authViewModel.isUserLoggedIn() else {
-            self.isLoading = false
-            return
-        }
-        userId = loadedUserId
-        do {
-            user = try await coreDataService.extractDataFromCoreData().first(where: { $0.id?.uuidString == userId })
-            userPreferences = try await coreDataService.extractDataFromCoreData().first(where: { $0.id?.uuidString == userId })
-        }
-        catch {
-            print("No data was extracted from Core Data")
-        }
-        // Load user and preferences from Core Data
-        isLoading = false
-    }
-
-    func reloadUserData() async {
-        isLoading = true
-        await loadUserData()
     }
 }
 

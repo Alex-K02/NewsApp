@@ -10,7 +10,7 @@ import SwiftUI
 struct BrowseAllMainView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject private var coreDataService: CoreDataService
-    @EnvironmentObject private var authViewModel: AuthViewModel
+    @EnvironmentObject private var authViewModel: AuthTokenManagerService
     @EnvironmentObject private var articleListViewModel: ArticlesListViewModel
     
     var articles: [Article]

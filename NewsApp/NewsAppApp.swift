@@ -11,16 +11,17 @@ import SwiftUI
 struct NewsAppApp: App {
     @Environment(\.scenePhase) private var scenePhase
     let persistenceController = PersistenceController.shared
-    @StateObject private var authViewModel = AuthViewModel()
     @StateObject private var coreDataService: CoreDataService
     @StateObject private var eventsListViewModel: EventsListViewModel
     @StateObject private var articlesListViewModel: ArticlesListViewModel
+    @StateObject private var authViewModel: AuthViewModel
     
     init() {
         let coreDataService = CoreDataService(viewContext: persistenceController.container.viewContext)
         _coreDataService = StateObject(wrappedValue: coreDataService)
         _eventsListViewModel = StateObject(wrappedValue: EventsListViewModel(coreDataService: coreDataService))
         _articlesListViewModel = StateObject(wrappedValue: ArticlesListViewModel(coreDataService: coreDataService))
+        _authViewModel = StateObject(wrappedValue: AuthViewModel(coreDataService: coreDataService))
         NotificationManager.shared.requestPermission { success in
             if success {
                 print("Permission granted!")
@@ -46,7 +47,7 @@ struct NewsAppApp: App {
                     }
             }
             else {
-                LoginView()
+                LoginPageView()
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
                     .environmentObject(coreDataService)
                     .environmentObject(authViewModel)
@@ -54,18 +55,15 @@ struct NewsAppApp: App {
                     .environmentObject(articlesListViewModel)
             }
         }
-        
-        .onChange(of: scenePhase) { oldScenePhase, newScenePhase in
-            if newScenePhase == .inactive {
+        .onChange(of: scenePhase) {
+            if scenePhase == .inactive {
                 Task {
                     await coreDataService.disablePeriodicDataSync()
                 }
-                if !authViewModel.loadRememberMeValue(token: authViewModel.userJWTSessionToken) {
-                    // Remove session from Keychain when app goes to inactive
-                    authViewModel.removeJWTFromKeychain()
-                }
+                // Remove session from Keychain when app goes to inactive
+                authViewModel.isRememberMeEnabled()
             }
-            else if newScenePhase == .active {
+            else if scenePhase == .active {
                 Task {
                     do {
                         try await coreDataService.enablePeriodicDataSync(articleListViewModel: ArticlesListViewModel(coreDataService: coreDataService))

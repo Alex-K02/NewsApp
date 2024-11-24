@@ -99,7 +99,7 @@ struct RegistrationView: View {
                             .disabled(!formIsValid)
                             .opacity(formIsValid ? 1.0 : 0.5)
                             .navigationDestination(isPresented: $isRegistered) {
-                                LoginView()
+                                LoginPageView()
                                     .navigationBarBackButtonHidden(true)
                             }
                             .alert(isPresented: $isRegistered) {

@@ -7,9 +7,19 @@
 
 import Foundation
 
+public struct FavoriteDomain: Codable, Hashable {
+    public let domain: String
+    public let likedAt: Date
+
+    public init(domain: String, likedAt: Date) {
+        self.domain = domain
+        self.likedAt = likedAt
+    }
+}
+
 @objc(Preferences)
 public class Preferences: NSObject, NSSecureCoding, Codable {
-    public var domains: [String]
+    public var domains: [FavoriteDomain]
     public var authors: [String]
     public var articleIDs: [String]
     public var eventIDs: [String]
@@ -20,7 +30,7 @@ public class Preferences: NSObject, NSSecureCoding, Codable {
     }
     
     // Initializer for normal use
-    init(domains: [String], authors: [String], articleIDs: [String], eventIDs: [String]) {
+    init(domains: [FavoriteDomain], authors: [String], articleIDs: [String], eventIDs: [String]) {
         self.domains = domains
         self.authors = authors
         self.articleIDs = articleIDs
@@ -37,7 +47,7 @@ public class Preferences: NSObject, NSSecureCoding, Codable {
 
     // Implement the init method for decoding
     required public init?(coder: NSCoder) {
-        guard let domains = coder.decodeObject(forKey: "domains") as? [String],
+        guard let domains = coder.decodeObject(forKey: "domains") as? [FavoriteDomain],
               let authors = coder.decodeObject(forKey: "authors") as? [String],
               let articles = coder.decodeObject(forKey: "articleIDs") as? [String],
               let events = coder.decodeObject(forKey: "eventIDs") as? [String] else {

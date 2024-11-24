@@ -17,14 +17,13 @@ enum SignInResult {
 class CoreDataService: ObservableObject {
     private var viewContext: NSManagedObjectContext
     private let passHelper = PassHelper()
-    private let authViewModel = AuthViewModel()
+    private let authViewModel = AuthTokenManagerService()
     
     private var syncTask: Task<Void, Never>?
     
     init(viewContext: NSManagedObjectContext) {
         self.viewContext = viewContext
     }
-    
     
     //MARK: - Event Functions
     public func loadEvents(eventsListViewModel: EventsListViewModel) async throws -> [Event] {
@@ -112,7 +111,7 @@ class CoreDataService: ObservableObject {
     
     //MARK: - ExtractingData
     
-    func fetchUserById(userId: String) async throws -> User? {
+    func fetchUser(with userId: String) async throws -> User? {
         let request: NSFetchRequest<User> = User.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", userId)
         let result = try viewContext.fetch(request)
@@ -312,7 +311,7 @@ class CoreDataService: ObservableObject {
     
     //MARK: - HandlingUserInput
     
-    func removeUserPrefernces(userPreference: UserPreference?, article: Article?=nil, domain: String?="", author: String?="", event: Event?=nil) async {
+    func removeUserPrefernces(userPreference: UserPreference?, article: Article?=nil, domain: FavoriteDomain?=nil, author: String?="", event: Event?=nil) async {
         await viewContext.perform {
             guard let userPreference = userPreference, let userId = userPreference.id else {
                 print("Invalid user preference or user ID")
@@ -338,7 +337,7 @@ class CoreDataService: ObservableObject {
                     }
                     
                     // Remove domain if provided and exists
-                    if let domain = domain, let domainIndex = domains.firstIndex(of: domain) {
+                    if let domain = domain, let domainIndex = domains.firstIndex(where: {$0.domain == domain.domain}) {
                         domains.remove(at: domainIndex)
                     }
                     
@@ -368,59 +367,49 @@ class CoreDataService: ObservableObject {
         }
     }
     
-    func saveUserPreferences(userPreference: UserPreference?, article: Article?=nil, domain: String?="", author: String?="", event: Event?=nil) async {
-        guard let userPreference = userPreference, let userId = userPreference.id else {
+    func saveUserPreferences(userPreference: UserPreference?, article: Article?=nil, domain: FavoriteDomain?=nil, author: String?="", event: Event?=nil) async {
+        guard let userPreference = userPreference else {
             print("Invalid user preference or user ID")
             return
         }
         
-        do {
-            // Extract data from Core Data asynchronously
-            let usersPreferences = try await self.extractDataFromCoreData() as [UserPreference]
-            
-            // Now enter the perform block for synchronous Core Data updates
-            await viewContext.perform {
-                if let currentUserPreference = usersPreferences.first, let currentPreference = currentUserPreference.preference {
-                    
-                    // Safely update preference properties
-                    var domains = currentPreference.domains
-                    var authors = currentPreference.authors
-                    var articleIDs = currentPreference.articleIDs
-                    var eventIDs = currentPreference.eventIDs
-                    
-                    if let author = author, !author.isEmpty {
-                        authors.append(author)
-                    }
-                    
-                    if let domain = domain, !domain.isEmpty {
-                        domains.append(domain)
-                    }
-                    
-                    if let article = article, let articleId = article.id?.uuidString, !articleId.isEmpty {
-                        articleIDs.append(articleId)
-                    }
-                    
-                    if let event = event, let eventId = event.id?.uuidString, !eventId.isEmpty {
-                        eventIDs.append(eventId)
-                    }
-                    
-                    
-                    // Update preference
-                    let newPreference = Preferences(domains: domains, authors: authors, articleIDs: articleIDs, eventIDs: eventIDs)
-                    currentUserPreference.preference = newPreference
+        await viewContext.perform {
+            if let currentPreference = userPreference.preference {
+                // Safely update preference properties
+                var domains = currentPreference.domains
+                var authors = currentPreference.authors
+                var articleIDs = currentPreference.articleIDs
+                var eventIDs = currentPreference.eventIDs
+                
+                if let author = author, !author.isEmpty {
+                    authors.append(author)
                 }
                 
-                // Save changes to Core Data
-                do {
-                    try self.viewContext.save()
-                    print("User Preferences are successfully updated")
-                } catch {
-                    print("Failed to save user preferences: \(error)")
+                if let domain = domain, !domain.domain.isEmpty {
+                    domains.append(domain)
                 }
+                
+                if let article = article, let articleId = article.id?.uuidString, !articleId.isEmpty {
+                    articleIDs.append(articleId)
+                }
+                
+                if let event = event, let eventId = event.id?.uuidString, !eventId.isEmpty {
+                    eventIDs.append(eventId)
+                }
+                
+                
+                // Update preference
+                let newPreference = Preferences(domains: domains, authors: authors, articleIDs: articleIDs, eventIDs: eventIDs)
+                userPreference.preference = newPreference
             }
             
-        } catch {
-            print("Failed to extract data from Core Data: \(error)")
+            // Save changes to Core Data
+            do {
+                try self.viewContext.save()
+                print("User Preferences are successfully updated")
+            } catch {
+                print("Failed to save user preferences: \(error)")
+            }
         }
     }
     

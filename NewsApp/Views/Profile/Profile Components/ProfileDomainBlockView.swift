@@ -9,8 +9,7 @@ import SwiftUI
 
 struct ProfileDomainBlockView: View {
     @Binding var showPopUp: Bool
-    let addingDate: Date
-    let domain: String?
+    let domain: FavoriteDomain?
     var onDelete: () -> Void
     
     var body: some View {
@@ -24,7 +23,7 @@ struct ProfileDomainBlockView: View {
                 // Title at the top left
                 VStack(alignment: .leading, spacing: 2) {
                     // Author name with truncation
-                    Text(domain ?? "")
+                    Text(domain?.domain ?? "")
                         .lineLimit(1) // Limit to 1 line and truncate if necessary
                         .truncationMode(.tail)
                         .font(.headline)
@@ -34,11 +33,12 @@ struct ProfileDomainBlockView: View {
                     HStack(spacing: 5) {
                         Image(systemName: "clock")
                             .imageScale(.small)
-                        Text("Added \(addingDate) days ago")
-                            .lineLimit(1) // Limit to 1 line and truncate if necessary
+                        Text("Added \(countHowManyDaysAgo(from: domain?.likedAt ?? Date()))")
+                            .lineLimit(1) // Adjust to 1 line for concise display
                             .truncationMode(.tail)
                             .font(.subheadline)
                             .fontWeight(.light)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         
                     }
                 }
@@ -69,11 +69,22 @@ struct ProfileDomainBlockView: View {
         .frame(width: UIScreen.main.bounds.width * 0.9, height: 50)
         .padding(.bottom, 14)
     }
+    
+    private func countHowManyDaysAgo(from date: Date) -> String {
+        let daysFromDate = Calendar.current.dateComponents([.day], from: date, to: Date()).day ?? 0
+        switch daysFromDate {
+        case 0:
+            return "today"
+        case 1:
+            return "yesterday"
+        default:
+            return "\(daysFromDate) days ago"
+        }
+    }
 }
 
 #Preview {
     @Previewable @State var showPopUp: Bool = true
-    @Previewable @State var domain: String? = "example.com"
-    let date = Date()
-    ProfileDomainBlockView(showPopUp: $showPopUp, addingDate: date, domain: domain, onDelete: { print("removing from the favorites")})
+    @Previewable @State var domain: FavoriteDomain? = FavoriteDomain(domain: "", likedAt: Date())
+    ProfileDomainBlockView(showPopUp: $showPopUp, domain: domain, onDelete: { print("removing from the favorites")})
 }

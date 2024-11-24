@@ -28,14 +28,14 @@ struct ForgotPasswordView: View {
                     self.emailIsSent = emailServiceController.sendEmail(address: emailInput)
                 })
                 .navigationDestination(isPresented: $emailIsSent) {
-                    LoginView()
+                    LoginPageView()
                 }
                 
                 Spacer()
                 
                 VStack {
                     NavigationLink {
-                        LoginView()
+                        LoginPageView()
                             .navigationBarBackButtonHidden(true)
                     } label: {
                         Image(systemName: "arrow.left")

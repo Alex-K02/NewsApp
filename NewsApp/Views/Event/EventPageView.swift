@@ -18,7 +18,6 @@ struct EventPageView: View {
     @State private var isLoading: Bool = true
     @State private var selectedDate: Date = Date()
     
-    @State private var userId: String?
     @State private var userPreference: UserPreference?
     
     @State private var isEventMarkedFavorite: Bool = false
@@ -30,7 +29,7 @@ struct EventPageView: View {
             if isLoading {
                 ProgressView("Loading articles...")
                     .padding()
-
+                
             }
             else if events.isEmpty {
                 Text("No events found...")
@@ -47,8 +46,8 @@ struct EventPageView: View {
                             Image(systemName: "list.bullet")
                                 .imageScale(.large)
                             NavigationLink(destination:
-                                AllEventsPageView()
-                                    .environmentObject(eventsListViewModel)
+                                            AllEventsPageView()
+                                .environmentObject(eventsListViewModel)
                             ) {
                                 Text("View all")
                                     .font(.title2)
@@ -57,7 +56,7 @@ struct EventPageView: View {
                                     .accentColor(.black)
                             }
                         }
-                            
+                        
                         
                         ScrollView {
                             LazyVStack {
@@ -84,7 +83,24 @@ struct EventPageView: View {
     
     private func loadEvents() {
         Task {
-            await loadUserPreference()
+            //checking userPreference
+            if let userPreference = authViewModel.userPreference {
+                self.userPreference = userPreference
+            } else {
+                try await authViewModel.loadUserData()
+                if let loadedUserPreference = authViewModel.userPreference {
+                    self.userPreference = loadedUserPreference
+                } else {
+                    // Handle the case where user data couldn't be loaded
+                    print("Failed to load user data.")
+                }
+            }
+            
+            if let events = self.userPreference?.preference?.eventIDs {
+                self.userFavoriteEvents = events
+            }
+            
+            //fetching from Core Data
             var fetchedEvents = eventsListViewModel.items
             if fetchedEvents.isEmpty {
                 fetchedEvents = await eventsListViewModel.fetchItems()
@@ -96,34 +112,6 @@ struct EventPageView: View {
     
     func extractDay(from date: Date) -> Date {
         return Calendar.current.startOfDay(for: date)
-    }
-    
-    func loadUserPreference() async {
-        // Load JWT from Keychain
-        authViewModel.loadJWTFromKeychain()
-        
-        // Check if user is logged in
-        guard authViewModel.isUserLoggedIn(),
-              let loadedUserId = authViewModel.loadIdValue(token: authViewModel.userJWTSessionToken) else {
-            print("No user id loaded or user not logged in.")
-            return
-        }
-        
-        self.userId = loadedUserId
-        
-        // Fetch data from Core Data
-        Task {
-            let userPreferences = try await coreDataService.extractDataFromCoreData() as [UserPreference]
-            // Find user by ID
-            if let foundUserPreference = userPreferences.first(where: { $0.id?.uuidString == userId }){
-                self.userPreference = foundUserPreference
-                
-                self.userFavoriteEvents = foundUserPreference.preference?.eventIDs ?? []
-            } else {
-                print("User not found in Core Data.")
-            }
-            isLoading = false
-        }
     }
 }
 

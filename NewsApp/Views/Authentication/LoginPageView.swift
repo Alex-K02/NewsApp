@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct LoginView: View {
+struct LoginPageView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var coreDataService: CoreDataService
-    @EnvironmentObject private var authViewModel: AuthViewModel
+    @EnvironmentObject private var authViewModel: AuthTokenManagerService
     @EnvironmentObject private var articleListViewModel: ArticlesListViewModel
     @EnvironmentObject private var eventsListViewModel: EventsListViewModel
     
@@ -56,10 +56,10 @@ struct LoginView: View {
                                     let result = await coreDataService.signInCheck(email: emailInput, password: passwordInput, rememberMe: rememberMe)
                                     
                                     switch result {
-                                    case .success(_):
-                                        userIsLogged = true
-                                    case .failure(let message):
-                                        popUpText = message
+                                        case .success(_):
+                                            userIsLogged = true
+                                        case .failure(let message):
+                                            popUpText = message
                                     }
                                     
                                     // Show the pop-up
@@ -104,7 +104,7 @@ struct LoginView: View {
 
 //MARK: - AuthenticationFormProtocol
 
-extension LoginView: AuthenticationFormProtocol {
+extension LoginPageView: AuthenticationFormProtocol {
     var formIsValid: Bool {
         return !emailInput.isEmpty
         && emailInput.contains("@")
@@ -192,5 +192,5 @@ struct CheckboxToggleStyle: ToggleStyle {
 
 
 #Preview {
-    LoginView()
+    LoginPageView()
 }

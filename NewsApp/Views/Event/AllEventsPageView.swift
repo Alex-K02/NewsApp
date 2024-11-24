@@ -21,7 +21,6 @@ struct AllEventsPageView: View {
     @State private var isEventMarkedFavorite: Bool = false
     @State private var userFavoriteEvents: [String] = []
     
-    @State private var userId: String?
     @State private var userPreference: UserPreference?
     
     var body: some View {
@@ -91,41 +90,34 @@ struct AllEventsPageView: View {
     // Load events and user preferences asynchronously
     private func loadEventsAndPreferences() async {
         do {
+            if let userPreference = authViewModel.userPreference {
+                self.userPreference = userPreference
+            }
+            else {
+                try await authViewModel.loadUserData()
+                if let loadedUserPreference = authViewModel.userPreference {
+                    self.userPreference = loadedUserPreference
+                }
+                else {
+                    // Handle the case where user data couldn't be loaded
+                    print("Failed to load user data.")
+                }
+            }
+            //exctracting favorite events from Core Data
+            if let events = self.userPreference?.preference?.eventIDs {
+                self.userFavoriteEvents = events
+            }
+            
+            // fetching all events from Core Data
             var fetchedEvents = eventsListViewModel.items
             if fetchedEvents.isEmpty {
                 fetchedEvents = await eventsListViewModel.fetchItems(lastSyncTime: "")
             }
             events = Dictionary(grouping: fetchedEvents, by: { extractYear(from: $0.start_date!) })
-            await loadUserPreference()
-            isLoading = false
         } catch {
             print("Error loading events or user preferences: \(error)")
-            isLoading = false
         }
-    }
-    
-    // Load user preferences from CoreData
-    private func loadUserPreference() async {
-        authViewModel.loadJWTFromKeychain()
-        guard authViewModel.isUserLoggedIn(),
-              let loadedUserId = authViewModel.loadIdValue(token: authViewModel.userJWTSessionToken) else {
-            print("No user id loaded or user not logged in.")
-            return
-        }
-        
-        userId = loadedUserId
-        
-        do {
-            let userPreferences = try await coreDataService.extractDataFromCoreData() as [UserPreference]
-            if let foundUserPreference = userPreferences.first(where: { $0.id?.uuidString == userId }) {
-                userPreference = foundUserPreference
-                userFavoriteEvents = foundUserPreference.preference?.eventIDs ?? []
-            } else {
-                print("User not found in Core Data.")
-            }
-        } catch {
-            print("Error loading user preferences: \(error)")
-        }
+        isLoading = false
     }
 }
 

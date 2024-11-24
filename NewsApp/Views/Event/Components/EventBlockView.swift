@@ -14,12 +14,10 @@ struct EventBlockView: View {
     @EnvironmentObject private var authViewModel: AuthViewModel
     @EnvironmentObject private var eventsListViewModel: EventsListViewModel
     
-    @State private var userId: String?
     @State private var userPreference: UserPreference?
     
     let event: Event
     @State private var isMarked: Bool = false
-    @State private var isLoading: Bool = true
     
     
     var body: some View {
@@ -85,9 +83,9 @@ struct EventBlockView: View {
             .background(Color(red: 0.91, green: 0.898, blue: 0.992))// #e8e5fd
             .cornerRadius(20)
         }
-        .task {
+        .onAppear() {
             Task {
-                try await loadUserPreference()
+                try await updateIsMarked()
             }
         }
     }
@@ -102,33 +100,27 @@ struct EventBlockView: View {
         return formattedDate
     }
     
-    func loadUserPreference() async throws {
-        // Load JWT from Keychain
-        authViewModel.loadJWTFromKeychain()
-        
-        // Check if user is logged in
-        guard authViewModel.isUserLoggedIn(),
-              let loadedUserId = authViewModel.loadIdValue(token: authViewModel.userJWTSessionToken) else {
-            print("No user id loaded or user not logged in.")
-            return
+    func updateIsMarked() async throws {
+        if let userPreference = authViewModel.userPreference {
+            self.userPreference = userPreference
+        } else {
+            try await authViewModel.loadUserData()
+            if let loadedUserPreference = authViewModel.userPreference {
+                self.userPreference = loadedUserPreference
+            } else {
+                // Handle the case where user data couldn't be loaded
+                print("Failed to load user data.")
+            }
         }
         
-        self.userId = loadedUserId
-        
-        let userPreferences = try await coreDataService.extractDataFromCoreData() as [UserPreference]
-        // Find user by ID
-        if let foundUserPreference = userPreferences.first(where: { $0.id?.uuidString == userId }){
-            self.userPreference = foundUserPreference
-            
-            let eventIds = foundUserPreference.preference?.eventIDs
-            if ((eventIds!.contains {$0 == event.id!.uuidString}))  {
+        if let eventIds = self.userPreference?.preference?.eventIDs {
+            if ((eventIds.contains {$0 == event.id!.uuidString}))  {
                 isMarked = true
             }
-            
-        } else {
-            print("User not found in Core Data.")
+            else {
+                isMarked = false
+            }
         }
-        self.isLoading = false
     }
 }
 
