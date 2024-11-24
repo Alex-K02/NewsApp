@@ -31,3 +31,4 @@ Continuous Content Updates
 * Liked Events: An option to "like" events and delete them from the account page as needed.
 * Event Parsing and Storage: AI-driven modules parse event data and store it in a Core Data structure dedicated to events.
 * Async Event Requests: Runs asynchronously with article requests to ensure efficient data handling.
+* Event Personalization and Calendar Integration: Allows users to save favorite events directly to their personal calendar, providing easy access and reminders for upcoming events.
