@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MiddlePopUpFavoriteContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @EnvironmentObject private var coreDataService: CoreDataService
+    @EnvironmentObject private var coreDataViewModel: CoreDataViewModel
     @EnvironmentObject private var authViewModel: AuthTokenManagerService
     
     let userPreference: UserPreference
@@ -42,7 +42,7 @@ struct MiddlePopUpFavoriteContentView: View {
             
             Button(action: {
                 Task {
-                    await coreDataService.removeUserPrefernces(userPreference: userPreference, article: article, domain: domain, author: author, event: event)
+                    await coreDataViewModel.removeUserPrefernces(userPreference: userPreference, article: article, domain: domain, author: author, event: event)
                     isPopUpActive = false
                 }
             }) {

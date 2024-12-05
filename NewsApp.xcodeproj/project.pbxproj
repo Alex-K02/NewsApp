@@ -80,7 +80,7 @@
 		2EC0566D2CF0EC65003E63C8 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC0566C2CF0EC65003E63C8 /* AuthViewModel.swift */; };
 		2EC9C27F2CE1281000766353 /* CalendarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC9C27E2CE1281000766353 /* CalendarService.swift */; };
 		2EEECB272CB3EC77007490F2 /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEECB262CB3EC76007490F2 /* PushNotificationService.swift */; };
-		2EEFABB32C861776001405DD /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEFABB22C861776001405DD /* CoreDataService.swift */; };
+		2EEFABB32C861776001405DD /* CoreDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEFABB22C861776001405DD /* CoreDataViewModel.swift */; };
 		2EF0DF542C739DEA00D14B8C /* MySQLKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2EF0DF532C739DEA00D14B8C /* MySQLKit */; };
 		2EF6E3462CC804F700AE9130 /* Event+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6E3442CC804F700AE9130 /* Event+CoreDataClass.swift */; };
 		2EF6E3472CC804F700AE9130 /* Event+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF6E3452CC804F700AE9130 /* Event+CoreDataProperties.swift */; };
@@ -191,7 +191,7 @@
 		2EC0566C2CF0EC65003E63C8 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		2EC9C27E2CE1281000766353 /* CalendarService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarService.swift; sourceTree = "<group>"; };
 		2EEECB262CB3EC76007490F2 /* PushNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationService.swift; sourceTree = "<group>"; };
-		2EEFABB22C861776001405DD /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
+		2EEFABB22C861776001405DD /* CoreDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataViewModel.swift; sourceTree = "<group>"; };
 		2EF6E3442CC804F700AE9130 /* Event+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2EF6E3452CC804F700AE9130 /* Event+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -451,6 +451,7 @@
 			children = (
 				2EC0566C2CF0EC65003E63C8 /* AuthViewModel.swift */,
 				2E7D77BC2CDA781D00A14BC9 /* BaseListViewModel.swift */,
+				2EEFABB22C861776001405DD /* CoreDataViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -459,7 +460,6 @@
 			isa = PBXGroup;
 			children = (
 				2E7F5DDE2C917DEC007B50A0 /* AuthTokenManagerService.swift */,
-				2EEFABB22C861776001405DD /* CoreDataService.swift */,
 				2E93DB522C7F866600E51DB0 /* APIService.swift */,
 				2E5F7D7D2C9A0A64002D1570 /* EmailService.swift */,
 				2EEECB262CB3EC76007490F2 /* PushNotificationService.swift */,
@@ -671,7 +671,7 @@
 				2E3FD74C2CA3108200DB0969 /* UserPreference+CoreDataProperties.swift in Sources */,
 				2E1105752C96E6350027A63A /* PlistHelper.swift in Sources */,
 				2E7DE1142C8D97EB00139DB2 /* PassHelper.swift in Sources */,
-				2EEFABB32C861776001405DD /* CoreDataService.swift in Sources */,
+				2EEFABB32C861776001405DD /* CoreDataViewModel.swift in Sources */,
 				2E1651D92C750B5700DA0560 /* Mainpage.swift in Sources */,
 				2E5F7D7E2C9A0A64002D1570 /* EmailService.swift in Sources */,
 				2E1105802C970DD20027A63A /* BrowseAllArticleBlockView.swift in Sources */,
@@ -853,6 +853,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"NewsApp/Preview Content\"";
@@ -886,6 +887,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"NewsApp/Preview Content\"";

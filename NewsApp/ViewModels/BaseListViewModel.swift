@@ -10,13 +10,13 @@ import CoreData
 
 class BaseListViewModel<T:NSManagedObject>: ObservableObject {
     public var plistHelper: PlistHelper
-    public var coreDataService: CoreDataService
+    public var coreDataViewModel: CoreDataViewModel
     
     @Published var items: [T] = []
     
-    init(plistHelper: PlistHelper = PlistHelper(), coreDataService: CoreDataService) {
+    init(plistHelper: PlistHelper = PlistHelper(), coreDataViewModel: CoreDataViewModel) {
         self.plistHelper = plistHelper
-        self.coreDataService = coreDataService
+        self.coreDataViewModel = coreDataViewModel
     }
     
     @MainActor
@@ -43,7 +43,7 @@ class BaseListViewModel<T:NSManagedObject>: ObservableObject {
     func loadFromCoreData() async -> [T] {
         var coreDataEvents: [T] = []
         do {
-            coreDataEvents = try await self.coreDataService.extractDataFromCoreData() as [T]
+            coreDataEvents = try await self.coreDataViewModel.extractDataFromCoreData() as [T]
             return coreDataEvents
         }
         catch {
@@ -73,7 +73,7 @@ final class EventsListViewModel: BaseListViewModel<Event> {
             
             var uploadedEvents = try await Task.detached { () -> [Event] in
                         // Process articles on a background thread
-                return try await self.coreDataService.uploadEvents(with: jsonEvents)
+                return try await self.coreDataViewModel.uploadEvents(with: jsonEvents)
                 }.value
 
             if !uploadedEvents.isEmpty {
@@ -116,7 +116,7 @@ final class ArticlesListViewModel: BaseListViewModel<Article> {
             
             var uploadedArticles = await Task.detached { () -> [Article] in
                         // Process articles on a background thread
-                return await self.coreDataService.uploadArticlesToCoreData(jsonArticles: jsonArticles)
+                return await self.coreDataViewModel.uploadArticlesToCoreData(jsonArticles: jsonArticles)
                 }.value
 
             if !uploadedArticles.isEmpty {

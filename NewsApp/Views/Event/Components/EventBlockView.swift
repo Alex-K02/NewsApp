@@ -10,7 +10,7 @@ import SwiftUI
 struct EventBlockView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) private var viewContext
-    @EnvironmentObject private var coreDataService: CoreDataService
+    @EnvironmentObject private var coreDataViewModel: CoreDataViewModel
     @EnvironmentObject private var authViewModel: AuthViewModel
     @EnvironmentObject private var eventsListViewModel: EventsListViewModel
     
@@ -59,9 +59,9 @@ struct EventBlockView: View {
                     Task {
                         if let userPreference {
                             if isMarked {
-                                await coreDataService.removeUserPrefernces(userPreference: userPreference, event: event)
+                                await coreDataViewModel.removeUserPrefernces(userPreference: userPreference, event: event)
                             } else {
-                                await coreDataService.saveUserPreferences(userPreference: userPreference, event: event)
+                                await coreDataViewModel.saveUserPreferences(userPreference: userPreference, event: event)
                             }
                         }
                         else {

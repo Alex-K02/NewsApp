@@ -10,7 +10,7 @@ import SwiftUI
 struct ArticleDetailedView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.openURL) private var openURL
-    @EnvironmentObject private var coreDataService: CoreDataService
+    @EnvironmentObject private var coreDataViewModel: CoreDataViewModel
     @EnvironmentObject private var authViewModel: AuthViewModel
     
     @State private var userPreference: UserPreference?
@@ -65,9 +65,9 @@ struct ArticleDetailedView: View {
                                                 isFavoriteAuthor.toggle()
                                                 Task {
                                                     if !isFavoriteAuthor {
-                                                        await coreDataService.removeUserPrefernces(userPreference: userPreference ?? nil, author: article.author)
+                                                        await coreDataViewModel.removeUserPrefernces(userPreference: userPreference ?? nil, author: article.author)
                                                     } else {
-                                                        await coreDataService.saveUserPreferences(userPreference: userPreference ?? nil, author: article.author)
+                                                        await coreDataViewModel.saveUserPreferences(userPreference: userPreference ?? nil, author: article.author)
                                                     }
                                                 }
                                             } label: {
@@ -94,9 +94,9 @@ struct ArticleDetailedView: View {
                                             Task {
                                                 guard let domain = article.domain else { return }
                                                 if !isFavoriteSite {
-                                                    await coreDataService.removeUserPrefernces(userPreference: userPreference!, domain: FavoriteDomain(domain: domain, likedAt: Date()))
+                                                    await coreDataViewModel.removeUserPrefernces(userPreference: userPreference!, domain: FavoriteDomain(domain: domain, likedAt: Date()))
                                                 } else {
-                                                    await coreDataService.saveUserPreferences(userPreference: userPreference!, domain: FavoriteDomain(domain: domain, likedAt: Date()))
+                                                    await coreDataViewModel.saveUserPreferences(userPreference: userPreference!, domain: FavoriteDomain(domain: domain, likedAt: Date()))
                                                 }
                                             }
                                         } label: {
@@ -138,10 +138,10 @@ struct ArticleDetailedView: View {
                             return
                         }
                         if isFavoriteArticle {
-                            await coreDataService.saveUserPreferences(userPreference: userPreference, article: article)
+                            await coreDataViewModel.saveUserPreferences(userPreference: userPreference, article: article)
                         }
                         else {
-                            await coreDataService.removeUserPrefernces(userPreference: userPreference, article: article)
+                            await coreDataViewModel.removeUserPrefernces(userPreference: userPreference, article: article)
                         }
                     }
                 })

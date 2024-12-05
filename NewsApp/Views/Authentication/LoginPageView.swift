@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LoginPageView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @EnvironmentObject var coreDataService: CoreDataService
+    @EnvironmentObject var coreDataViewModel: CoreDataViewModel
     @EnvironmentObject private var authViewModel: AuthTokenManagerService
     @EnvironmentObject private var articleListViewModel: ArticlesListViewModel
     @EnvironmentObject private var eventsListViewModel: EventsListViewModel
@@ -53,7 +53,7 @@ struct LoginPageView: View {
 
                             AuthButtonView(title: "Log In", action: {
                                 Task {
-                                    let result = await coreDataService.signInCheck(email: emailInput, password: passwordInput, rememberMe: rememberMe)
+                                    let result = await coreDataViewModel.signInCheck(email: emailInput, password: passwordInput, rememberMe: rememberMe)
                                     
                                     switch result {
                                         case .success(_):

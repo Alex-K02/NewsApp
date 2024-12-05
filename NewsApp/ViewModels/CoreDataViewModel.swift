@@ -1,5 +1,5 @@
 //
-//  CoreDataService.swift
+//  CoreDataViewModel.swift
 //  NewsApp
 //
 //  Created by Alex Kondratiev on 02.09.24.

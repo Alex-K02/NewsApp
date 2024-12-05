@@ -10,13 +10,13 @@ import CoreData
 
 class AuthViewModel: ObservableObject {
     private let authTokenManager: AuthTokenManagerService = AuthTokenManagerService()
-    let coreDataService: CoreDataService
+    let coreDataViewModel: CoreDataViewModel
     
     @Published var user: User? = nil
     @Published var userPreference: UserPreference? = nil
     
-    init(coreDataService: CoreDataService) {
-        self.coreDataService = coreDataService
+    init(coreDataViewModel: CoreDataViewModel) {
+        self.coreDataViewModel = coreDataViewModel
         Task {
             try await loadUserData()
         }
@@ -69,7 +69,7 @@ class AuthViewModel: ObservableObject {
     @MainActor
     func loadUser(with userID: String) async throws {
         do {
-            if let foundUser = try await coreDataService.fetchUser(with: userID) {
+            if let foundUser = try await coreDataViewModel.fetchUser(with: userID) {
                 self.user = foundUser
             }
             else {
@@ -84,7 +84,7 @@ class AuthViewModel: ObservableObject {
     @MainActor
     func loadUserPreference(with userID: String) async throws {
         do {
-            let userPreferences: [UserPreference] = try await coreDataService.extractDataFromCoreData()
+            let userPreferences: [UserPreference] = try await coreDataViewModel.extractDataFromCoreData()
             if let currentUserPreference = userPreferences.first(where: { $0.id?.uuidString == userID }) {
                 self.userPreference = currentUserPreference
             }

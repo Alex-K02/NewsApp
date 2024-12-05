@@ -10,7 +10,7 @@ import SwiftUI
 struct EditProfileView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) private var viewContext
-    @EnvironmentObject private var coreDataService: CoreDataService
+    @EnvironmentObject private var coreDataViewModel: CoreDataViewModel
     @EnvironmentObject private var authViewModel: AuthViewModel
     
     @State private var user: User?
@@ -101,7 +101,7 @@ struct EditProfileView: View {
                             }
                             SaveDataButton(action: {
                                 Task {
-                                    await coreDataService.saveUserData(user: user, email: email, dateOfBirth: dateOfBirth, password: nil)
+                                    await coreDataViewModel.saveUserData(user: user, email: email, dateOfBirth: dateOfBirth, password: nil)
                                     showPopUp = true
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {

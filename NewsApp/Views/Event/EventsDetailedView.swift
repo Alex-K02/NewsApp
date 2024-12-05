@@ -10,7 +10,7 @@ import SwiftUI
 struct EventsDetailedView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
-    @EnvironmentObject private var coreDataService: CoreDataService
+    @EnvironmentObject private var coreDataViewModel: CoreDataViewModel
     
     let event: Event
     @State private var isEventUnique: Bool = true

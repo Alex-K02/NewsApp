@@ -11,7 +11,7 @@ struct RegistrationView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var articleListViewModel: ArticlesListViewModel
-    @EnvironmentObject var coreDataService: CoreDataService
+    @EnvironmentObject var coreDataViewModel: CoreDataViewModel
     
     @State private var nameInput: String = ""
     @State private var emailInput: String = ""
@@ -74,7 +74,7 @@ struct RegistrationView: View {
                             
                             AuthButtonView(title: "Register", action: {
                                 Task {
-                                    let result = await coreDataService.handleUserRegistration(email: emailInput, name: nameInput, dateOfBirth: dateOfBirthInput, password: passwordInput)
+                                    let result = await coreDataViewModel.handleUserRegistration(email: emailInput, name: nameInput, dateOfBirth: dateOfBirthInput, password: passwordInput)
                                     
                                     switch result {
                                     case .success(_):

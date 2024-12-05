@@ -15,7 +15,7 @@ enum Tab {
 
 struct MainPageView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @EnvironmentObject private var coreDataService: CoreDataService
+    @EnvironmentObject private var coreDataViewModel: CoreDataViewModel
     @EnvironmentObject private var authViewModel: AuthTokenManagerService
     @EnvironmentObject private var articleListViewModel: ArticlesListViewModel
     @EnvironmentObject private var eventsListViewModel: EventsListViewModel
@@ -30,7 +30,7 @@ struct MainPageView: View {
     var body: some View {
         NavigationStack {
             TabView(selection: $selection) {
-                MainTabContentView(articles: $articles, isLoading: $isLoading, articleListViewModel: articleListViewModel, coreDataService: coreDataService)
+                MainTabContentView(articles: $articles, isLoading: $isLoading, articleListViewModel: articleListViewModel, coreDataViewModel: coreDataViewModel)
                 .tabItem {
                     Label("Main", systemImage: "newspaper")
                 }
@@ -63,8 +63,8 @@ struct MainPageView: View {
             if fetchedArticles.isEmpty {
                 fetchedArticles = await articleListViewModel.fetchItems()
             }
-            let evaluatedArticles = try await coreDataService.evaluateArticles(newArticles: fetchedArticles)
-            let sortedArticles = try await coreDataService.sortByDateAndScore(articles: evaluatedArticles)
+            let evaluatedArticles = try await coreDataViewModel.evaluateArticles(newArticles: fetchedArticles)
+            let sortedArticles = try await coreDataViewModel.sortByDateAndScore(articles: evaluatedArticles)
             
             if !sortedArticles.isEmpty {
                 articles = sortedArticles.map(\.article)
@@ -83,7 +83,7 @@ struct MainTabContentView: View {
     @Binding var articles: [Article]
     @Binding var isLoading: Bool
     @ObservedObject var articleListViewModel: ArticlesListViewModel
-    let coreDataService: CoreDataService
+    let coreDataViewModel: CoreDataViewModel
     
     var body: some View {
         ScrollView {

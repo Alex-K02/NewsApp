@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ForgotPasswordView: View {
-    @EnvironmentObject var coreDataService: CoreDataService
+    @EnvironmentObject var coreDataViewModel: CoreDataViewModel
     @State private var emailInput: String = ""
     @State private var emailIsSent: Bool = false
     

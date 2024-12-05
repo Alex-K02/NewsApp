@@ -10,7 +10,7 @@ import SwiftUI
 struct ChangePasswordView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) private var viewContext
-    @EnvironmentObject var coreDataService: CoreDataService
+    @EnvironmentObject var coreDataViewModel: CoreDataViewModel
     @EnvironmentObject private var authViewModel: AuthViewModel
     
     @State private var userIsLogged: Bool = false
@@ -73,7 +73,7 @@ struct ChangePasswordView: View {
                                     gotoLogin = true
                                     return
                                 }
-                                await coreDataService.saveUserData(user: user, email: user.email ?? "", dateOfBirth: user.dateOfBirth ?? Date(), password: passwordInput)
+                                await coreDataViewModel.saveUserData(user: user, email: user.email ?? "", dateOfBirth: user.dateOfBirth ?? Date(), password: passwordInput)
                                 
                                 popupMessage = "Your password is now updated!"
                                 showPopUp.toggle()
