@@ -14,7 +14,7 @@ enum SignInResult {
     case failure(message: String)
 }
 
-class CoreDataService: ObservableObject {
+class CoreDataViewModel: ObservableObject {
     private var viewContext: NSManagedObjectContext
     private let passHelper = PassHelper()
     private let authViewModel = AuthTokenManagerService()
