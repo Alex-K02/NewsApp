@@ -73,8 +73,9 @@ struct ProfileView: View {
         }
         .onAppear() {
             Task {
-                try await loadUserData()
+                defer {self.isLoading = false}
                 await loadData()
+                try await loadUserData()
             }
         }
     }
@@ -221,9 +222,6 @@ struct ProfileView: View {
                     HStack {
                         VStack(alignment: .leading) {
                             Text(author)
-//                            Text("From: \(domain ?? "Not specified")")
-//                                .font(.subheadline)
-//                                .foregroundColor(.gray)
                         }
                         Spacer()
                         Button(action: {
@@ -260,7 +258,6 @@ struct ProfileView: View {
         catch {
             throw AuthError.userNotFound
         }
-        
     }
     private func loadData() async {
         //loading additional data
@@ -272,7 +269,6 @@ struct ProfileView: View {
         if events.isEmpty {
             events = await eventsListViewModel.fetchItems()
         }
-        isLoading = false
     }
 }
 

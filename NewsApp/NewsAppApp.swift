@@ -35,25 +35,15 @@ struct NewsAppApp: App {
             
     var body: some Scene {
         WindowGroup {
-            if authViewModel.isUserLoggedIn() {
-                MainPageView()
-                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                    .environmentObject(coreDataViewModel)
-                    .environmentObject(authViewModel)
-                    .environmentObject(eventsListViewModel)
-                    .environmentObject(articlesListViewModel)
-                    .onAppear() {
-                        UNUserNotificationCenter.current().setBadgeCount(0)
-                    }
-            }
-            else {
-                LoginPageView()
-                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                    .environmentObject(coreDataViewModel)
-                    .environmentObject(authViewModel)
-                    .environmentObject(eventsListViewModel)
-                    .environmentObject(articlesListViewModel)
-            }
+            MainPageView()
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environmentObject(coreDataViewModel)
+                .environmentObject(authViewModel)
+                .environmentObject(eventsListViewModel)
+                .environmentObject(articlesListViewModel)
+                .onAppear() {
+                    UNUserNotificationCenter.current().setBadgeCount(0)
+                }
         }
         .onChange(of: scenePhase) {
             if scenePhase == .inactive {

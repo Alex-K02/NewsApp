@@ -43,6 +43,7 @@ struct EventPageView: View {
                     
                     VStack {
                         HStack {
+                            Spacer()
                             Image(systemName: "list.bullet")
                                 .imageScale(.large)
                             NavigationLink(destination:
@@ -55,11 +56,12 @@ struct EventPageView: View {
                                     .fontWeight(.bold)
                                     .accentColor(.black)
                             }
+                            Spacer()
                         }
                         
                         
                         ScrollView {
-                            LazyVStack {
+                            VStack(alignment: .center) {
                                 if let currentDateEvents = events[extractDay(from: selectedDate)] {
                                     ForEach(currentDateEvents, id: \.self) { event in
                                         EventBlockView(event: event)
@@ -77,11 +79,11 @@ struct EventPageView: View {
             }
         }
         .task {
-            loadEvents()
+            loadData()
         }
     }
     
-    private func loadEvents() {
+    private func loadData() {
         Task {
             //checking userPreference
             if let userPreference = authViewModel.userPreference {

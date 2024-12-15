@@ -56,7 +56,7 @@ struct AllEventsPageView: View {
                     ScrollView {
                         let filteredEvents = events[extractYear(from: selectedDate)]
                         if let filteredEvents, !filteredEvents.isEmpty {
-                            LazyVStack {
+                            VStack(alignment: .center) {
                                 ForEach(filteredEvents, id: \.self) { event in
                                     EventBlockView(event: event)
                                 }

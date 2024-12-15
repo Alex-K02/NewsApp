@@ -62,12 +62,16 @@ struct ArticleDetailedView: View {
                                     }
                                     .popover(isPresented: $isShowingAuthorPopover, arrowEdge: .bottom, content:  {
                                             Button {
+                                                guard let userPreference else {
+                                                    gotoLogin = true
+                                                    return
+                                                }
                                                 isFavoriteAuthor.toggle()
                                                 Task {
                                                     if !isFavoriteAuthor {
-                                                        await coreDataViewModel.removeUserPrefernces(userPreference: userPreference ?? nil, author: article.author)
+                                                        await coreDataViewModel.removeUserPrefernces(userPreference: userPreference, author: article.author)
                                                     } else {
-                                                        await coreDataViewModel.saveUserPreferences(userPreference: userPreference ?? nil, author: article.author)
+                                                        await coreDataViewModel.saveUserPreferences(userPreference: userPreference, author: article.author)
                                                     }
                                                 }
                                             } label: {
@@ -90,13 +94,17 @@ struct ArticleDetailedView: View {
                                     }
                                     .popover(isPresented: $isShowingSitePopover, arrowEdge: .bottom, content:  {
                                         Button {
+                                            guard let userPreference else {
+                                                gotoLogin = true
+                                                return
+                                            }
                                             isFavoriteSite.toggle()
                                             Task {
                                                 guard let domain = article.domain else { return }
                                                 if !isFavoriteSite {
-                                                    await coreDataViewModel.removeUserPrefernces(userPreference: userPreference!, domain: FavoriteDomain(domain: domain, likedAt: Date()))
+                                                    await coreDataViewModel.removeUserPrefernces(userPreference: userPreference, domain: FavoriteDomain(domain: domain, likedAt: Date()))
                                                 } else {
-                                                    await coreDataViewModel.saveUserPreferences(userPreference: userPreference!, domain: FavoriteDomain(domain: domain, likedAt: Date()))
+                                                    await coreDataViewModel.saveUserPreferences(userPreference: userPreference, domain: FavoriteDomain(domain: domain, likedAt: Date()))
                                                 }
                                             }
                                         } label: {

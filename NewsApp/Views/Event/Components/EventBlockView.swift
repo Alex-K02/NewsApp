@@ -17,7 +17,9 @@ struct EventBlockView: View {
     @State private var userPreference: UserPreference?
     
     let event: Event
+    
     @State private var isMarked: Bool = false
+    @State private var gotoLogin: Bool = false
     
     
     var body: some View {
@@ -63,12 +65,12 @@ struct EventBlockView: View {
                             } else {
                                 await coreDataViewModel.saveUserPreferences(userPreference: userPreference, event: event)
                             }
+                            withAnimation(.easeInOut) {
+                                self.isMarked.toggle()
+                            }
                         }
                         else {
-                            print("No userPreference given")
-                        }
-                        withAnimation(.easeInOut) {
-                            self.isMarked.toggle()
+                            gotoLogin = true
                         }
                     }
                 }) {
@@ -82,6 +84,9 @@ struct EventBlockView: View {
             .padding()
             .background(Color(red: 0.91, green: 0.898, blue: 0.992))// #e8e5fd
             .cornerRadius(20)
+            .navigationDestination(isPresented: $gotoLogin) {
+                LoginPageView()
+            }
         }
         .onAppear() {
             Task {
