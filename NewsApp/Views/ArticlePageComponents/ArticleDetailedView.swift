@@ -26,7 +26,8 @@ struct ArticleDetailedView: View {
     @State private var isShowingSitePopover: Bool = false
     
     let article: Article
-        
+    
+    @ViewBuilder
     var body: some View {
         NavigationStack {
             if isLoading {
@@ -123,10 +124,13 @@ struct ArticleDetailedView: View {
                         }
                     
                         Text(article.descrip ?? "Error: No description provided")
-                            .padding(.vertical)
-                        Text(article.maintext ?? "Error: No article text provided")
+                            .padding(.top)
+                            .fontWeight(.semibold)
+                        Text(article.maintext?.trimmingCharacters(in: .whitespaces) ?? "Error: No article text provided")
                             .font(.body)
-                            .padding(.vertical)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: UIScreen.main.bounds.size.width * 0.9)
+                            .padding(.vertical, 10)
                         Spacer()
                     }
                     .padding(.horizontal)

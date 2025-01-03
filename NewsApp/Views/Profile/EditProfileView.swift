@@ -42,6 +42,7 @@ struct EditProfileView: View {
                             }
                             self.email = user?.email ?? "name@example.com"
                             self.isLoading = false
+                            self.dateOfBirth = user?.dateOfBirth ?? .init()
                         }
                     }
             } else {
@@ -60,8 +61,6 @@ struct EditProfileView: View {
                                         .fontWeight(.bold)
                                         .frame(maxWidth: .infinity)
                                 }
-                                
-                                
                                 VStack(alignment: .leading) {
                                     Text("Profile Settings")
                                         .bold()

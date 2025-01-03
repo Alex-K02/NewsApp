@@ -30,6 +30,7 @@ struct MainNewsBlockView: View {
                         .multilineTextAlignment(.leading)
                         .font(.headline)
                         .fontWeight(.medium)
+                        .lineLimit(2)
                         .padding(.top, 8)
 
                     Spacer()

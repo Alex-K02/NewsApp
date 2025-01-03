@@ -23,12 +23,14 @@ struct SubArticleBlockView: View {
                     .multilineTextAlignment(.leading)
                     .font(.headline)
                     .fontWeight(.bold)
+                    .lineLimit(2)
                     .padding(.top, 8)
                 
                 Text(article.descrip ?? "Description")
                     .multilineTextAlignment(.leading)
                     .font(.subheadline)
                     .fontWeight(.medium)
+                    .lineLimit(2)
                     .padding(.top, 4)
 
                 Spacer()

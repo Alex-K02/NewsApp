@@ -29,6 +29,7 @@ struct BrowseAllArticleBlockView: View {
                     .multilineTextAlignment(.leading)
                     .font(.subheadline)
                     .fontWeight(.medium)
+                    .lineLimit(2)
                     .padding(.top, 4)
 
                 Spacer()

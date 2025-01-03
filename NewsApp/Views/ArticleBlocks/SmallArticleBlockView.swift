@@ -29,6 +29,7 @@ struct SmallArticleBlockView: View {
                     .multilineTextAlignment(.leading)
                     .font(.subheadline)
                     .fontWeight(.medium)
+                    .lineLimit(3)
                     .padding(.top, 4)
 
                 Spacer()

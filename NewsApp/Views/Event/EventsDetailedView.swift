@@ -60,20 +60,20 @@ struct EventsDetailedView: View {
                     .padding(.horizontal, 10)
                     .padding(.bottom)
                     
-                    HStack {
+                    VStack(alignment: .center, spacing: 10) {
                         Image(systemName: "i.circle")
+                            .fontWeight(.bold)
                         Text(event.summary ?? "Error: No summary available")
-                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
                             .font(.headline)
                     }
-                    .padding(.horizontal, 10)
-                    .padding(.bottom)
+                    .padding(.horizontal)
                     
                     HStack(spacing: 100) {
                         ListBlockView(iconName: "person", label: "Speakers", data: event.speakers ?? "")
                         ListBlockView(iconName: "dollarsign", label: "Sponsors", data: event.sponsors ?? "")
                     }
-                    .padding(.bottom)
+                    .padding(.vertical)
                     
                     Spacer()
                     
