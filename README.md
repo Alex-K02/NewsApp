@@ -39,7 +39,7 @@ Explore how AboutIT enhances user experiences through its intuitive design and f
 
 Upon launching the app, users are greeted with:
 
-![Main Page](assets/MainPage/MainPage.png)
+<img src="assets/MainPage/MainPage.png" alt="Main Page" width="200">
 
 The Main Page consists of two sections:
 
@@ -47,7 +47,7 @@ The Main Page consists of two sections:
 
 2. Bottom Section: Features all other articles.
 
-By scrolling down to the ![Browse All](assets/MainPage/MainPageBrowseAll.png) section, users can view additional articles.
+By scrolling down to the <img src="assets/MainPage/MainPageBrowseAll.png" alt="Browse All" width="200"> section, users can view additional articles.
 
 ### Article Page
 
