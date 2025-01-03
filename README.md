@@ -47,35 +47,44 @@ The Main Page consists of two sections:
 
 2. Bottom Section: Features all other articles.
 
-By scrolling down to the <img src="assets/MainPage/MainPageBrowseAll.png" alt="Browse All" width="200"> section, users can view additional articles.
+By scrolling down to the "Browse All" section, users can view additional articles.
+
+<img src="assets/MainPage/MainPageBrowseAll.png" alt="Browse All" width="200">
 
 ### Article Page
 
 Clicking on an article preview opens the detailed view:
 
-![articledetailedview](assets/ArticlePage/ArticlePage.png)
+<img src="assets/ArticlePage/ArticlePage.png" alt="Article Detailed View" width="200">
 
 Here, logged-in users can save articles by clicking the heart icon in the top corner. They can also save: 
 
-* The ![website hosting the article](assets/ArticlePage/ArticlePageFavSite.png).
-* The ![article's author](assets/ArticlePage/ArticlePageFavAuthor.png).
+* The website hosting the article.
+
+<img src="assets/ArticlePage/ArticlePageFavSite.png" alt="website hosting the article" width="200">
+
+* The article's author.
+
+<img src="assets/ArticlePage/ArticlePageFavAuthor.png" alt="article's author" width="200">
 
 ### Event Page
 
 Navigating to the Event Page via the bottom tab reveals a custom calendar highlighting upcoming events:
 
-![Event Page](assets/EventPage/EventPage.png)
+<img src="assets/EventPage/EventPage.png" alt="Event Page" width="200">
 
 On the Event Page users sees a cutom created calendar with a current date. You can also see upcoming events marked with a purple circle. There's also a list of upcoming events at the bottom of the screen.
 
-![eventpage](assets/EventPage/EventPage.png)
+<img src="assets/EventPage/EventPage.png" alt="Event Page" width="200">
 
-Moving on to ![All Events Page](assets/EventPage/AllEventsPage.png), where all events of current year will be shown.
+Moving on to All Events Page, where all events of current year will be shown.
+
+<img src="assets/EventPage/AllEventsPage.png" alt="All Events Page" width="200">
 
 Logged-in users can:
 
-Save events as favorites by clicking the plus icon in the top-right corner.
-Access event details by selecting an event. 
+* Save events as favorites by clicking the plus icon in the top-right corner.
+* Access event details by selecting an event. 
 
 ### Event Details
 
@@ -94,42 +103,52 @@ Scrolling down allows users to:
 Add the event to their calendar.
 Visit the event’s website by clicking "Join [event name]."
 
-![Event Detailed Page](assets/EventPage/EventDetailedPage.png)
+<img src="assets/EventPage/EventDetailedPage.png" alt="Event Detailed Page" width="200">
 
 Here users see the most relevant information about the event such as: name of the event, location, time of the event, price, type(in-person/online) as well as short description, speakers and sponsors.
 
-![eventdetailedpage2](assets/EventPage/EventDetailedPage2.png)
+<img src="assets/EventPage/EventDetailedPage2.png" alt="eventdetailedpage2" width="200">
 
 By scrolling down the users has an opportunity to add this event to his calender or check the events website by clicking "Join [event name]"
 
 ### Profile Page
 
-The ![Profile Page ](assets/ProfilePage/ProfilePage.png) is accessible to signed-in users, displaying:
+The Profile Page is accessible to signed-in users, displaying:
 * Personal data
 * Saved articles, sites, authors, and events:
 
+<img src="assets/ProfilePage/ProfilePage.png" alt="Profile Page" width="200">
+
 Examples include:
-* ![Favorite Sites](assets/ProfilePage/ProfilePageFavSites.png)
-* ![Favorite Authors](assets/ProfilePage/ProfilePageFavAuthors.png)
-* ![Favorite Events](assets/ProfilePage/ProfilePageFavEvents.png)
+* Favorite Sites <img src="assets/ProfilePage/ProfilePageFavSites.png" alt="Favorite Sites" width="200">
+* Favorite Authors <img src="assets/ProfilePage/ProfilePageFavAuthors.png" alt="Favorite Authors" width="200">
+* Favorite Events <img src="assets/ProfilePage/ProfilePageFavEvents.png" alt="Favorite Events" width="200">
 
 If there are no saved items, users will see:
 
-![No Favorites](assets/ProfilePage/ProfilePageNoFav.png)
+<img src="assets/ProfilePage/ProfilePageNoFav.png" alt="No Favorites" width="200">
 
 Users can also remove saved items by clicking the icon on the right:
 
-![Removing Favorite](assets/ProfilePage/ProfilePageRemovingFav.png)
+<img src="assets/ProfilePage/ProfilePageRemovingFav.png" alt="Removing Favorite" width="200">
 
 ### Profile Editing
 
-Users can update their profile by selecting !["Edit Profile"](assets/ProfilePage/ProfilePageSettings.png) Available options include changing personal details such as date of birth and password.
+Users can update their profile by selecting "Edit Profile". Available options include changing personal details such as date of birth and password.
+
+<img src="assets/ProfilePage/ProfilePageSettings.png" alt="Edit Profile" width="200">
 
 To update their password, users navigate to:
 
-![Password Change](assets/ProfilePage/ProfilePageChangePassword.png)
+<img src="assets/ProfilePage/ProfilePageChangePassword.png" alt="Password Change" width="200">
 
 ### Authentication Pages
+
+Finally, MyApp features intuitive sign-in and sign-up pages:
+
+* <img src="assets/Authentication/RegistrationPage.png" alt="Sign-Up Page 1" width="300">
+* <img src="assets/Authentication/RegistrationPage2.png" alt="Sign-Up Page 2" width="300">
+* <img src="assets/Authentication/LoginPage.png" alt="Sign-In Page" width="300">
 
 Finally, MyApp features intuitive sign-in and sign-up pages:
 
