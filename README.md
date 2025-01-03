@@ -147,5 +147,5 @@ To update their password, users navigate to:
 Finally, MyApp features intuitive sign-in and sign-up pages:
 
 * <img src="assets/Authentication/RegistrationPage.png" alt="Sign-Up Page 1" width="200">
-* <img src="assets/Authentication/RegistrationPage2.png" alt="Sign-Up Page 2" width="200">
+* <img src="assets/Authentication/RegistrationPagePart2.png" alt="Sign-Up Page 2" width="200">
 * <img src="assets/Authentication/LoginPage.png" alt="Sign-In Page" width="200">
