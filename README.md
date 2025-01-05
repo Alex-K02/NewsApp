@@ -1,6 +1,12 @@
 # NewsApp "AboutIT"
 
-This app is a personalized platform for discovering and managing IT industry news and events, customized to match user interests. It uses an external Scraper Module (from a separate repository) to gather and store data in a central database. This data is accessible through an easy-to-use API, enabling dynamic updates within the app. Key features include personalized user preferences, secure data storage, and an AI-powered event parsing system to keep users updated with the latest relevant content.
+The idea for this app arose from my desire to stay consistently updated on tech news, spanning fields such as AI/ML, cybersecurity, software development, and more. This app is designed to fulfill that need. It integrates with an external [Scraper Module (from a separate repository)](https://github.com/Alex-K02/Scraper) to gather and store data in a central database. The data is accessible via an API, allowing for dynamic updates within the app.
+
+Key features include:
+
+Personalized user preferences
+Secure data storage
+An AI-powered event parsing system to deliver the latest and most relevant content
 
 ## Main Functionality
 ### Core Data Integration
@@ -10,6 +16,14 @@ This app is a personalized platform for discovering and managing IT industry new
 ### Authentication
 * Secure Sign-In and Sign-Up: JWT-based authentication, implemented with **KeychainSwift**, supports secure access to personalized features.
 * Sensitive Data Protection: Uses hashed values with added salts to protect user passwords and other sensitive information.
+
+### Authentication
+* JWT-Based Authentication: Implements secure sign-in and sign-up using JSON Web Tokens (JWT), ensuring encrypted and tamper-proof session management.
+* Keychain Integration: Sensitive data like tokens and passwords are securely stored in Keychain, preventing unauthorized access.
+* Periodic Token Expiry: JWT tokens are designed to expire periodically, reducing the risk of session hijacking and ensuring enhanced security.
+
+### Password Security
+* User passwords are hashed with added salts, ensuring strong protection against brute force and dictionary attacks. This approach follows best practices in modern password management.
 
 ## Extended Functionality
 ### User Preferences
