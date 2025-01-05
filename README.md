@@ -4,9 +4,9 @@ The idea for this app arose from my desire to stay consistently updated on tech 
 
 Key features include:
 
-Personalized user preferences
-Secure data storage
-An AI-powered event parsing system to deliver the latest and most relevant content
+* Personalized user preferences
+* Secure data storage
+* An AI-powered event parsing system to deliver the latest and most relevant content
 
 ## Main Functionality
 ### Core Data Integration
