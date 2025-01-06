@@ -5,21 +5,19 @@ The idea for this app arose from my desire to stay consistently updated on tech 
 Key features include:
 
 * Personalized user preferences
-* Secure data storage
+* JWT-based authorization system
 * An AI-powered event parsing system to deliver the latest and most relevant content
 
 ## Main Functionality
 ### Core Data Integration
 * Comprehensive Data Structure: Core Data setup includes all necessary tables and dependencies, enabling efficient data management and storage.
+
 ### API Integration
 * Data Flow and Access: API calls enable the transfer of scraped articles into Core Data and retrieval for in-app display, providing a seamless user experience.
-### Authentication
-* Secure Sign-In and Sign-Up: JWT-based authentication, implemented with **KeychainSwift**, supports secure access to personalized features.
-* Sensitive Data Protection: Uses hashed values with added salts to protect user passwords and other sensitive information.
 
 ### Authentication
 * JWT-Based Authentication: Implements secure sign-in and sign-up using JSON Web Tokens (JWT), ensuring encrypted and tamper-proof session management.
-* Keychain Integration: Sensitive data like tokens and passwords are securely stored in Keychain, preventing unauthorized access.
+* KeychainSwift Integration: Sensitive data like tokens and passwords are securely stored in Keychain, preventing unauthorized access.
 * Periodic Token Expiry: JWT tokens are designed to expire periodically, reducing the risk of session hijacking and ensuring enhanced security.
 
 ### Password Security
